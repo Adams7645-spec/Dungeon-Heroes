@@ -43,14 +43,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\Dungeon\LevelDungeon\EasyDungeon.cs" />
+    <Compile Include="Game\Dungeon\BlankDungeon.cs" />
+    <Compile Include="Game\Items\Armor\ItemArmor\Armor1.cs" />
+    <Compile Include="Game\Items\Armor\ItemArmor\Armor2.cs" />
+    <Compile Include="Game\Items\Armor\BlankArmor.cs" />
+    <Compile Include="Game\Items\Weapon\BlankWeapon.cs" />
+    <Compile Include="Game\Status\BlankStatus.cs" />
+    <Compile Include="Game\Character\BlankCharacter.cs" />
+    <Compile Include="Game\Character\Classes\SampleClass1.cs" />
+    <Compile Include="Game\Core\Game.cs" />
+    <Compile Include="Game\Dungeon\LevelDungeon\HardDungeon.cs" />
+    <Compile Include="Game\Dungeon\LevelDungeon\MediumDungeon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Game\Character\Classes\SampleClass2.cs" />
+    <Compile Include="Game\Character\Classes\SampleClass3.cs" />
+    <Compile Include="Game\Character\Classes\SampleClass4.cs" />
+    <Compile Include="Game\Character\Classes\SampleClass5.cs" />
+    <Compile Include="Game\Status\Conditions\Status1.cs" />
+    <Compile Include="Game\Status\Conditions\Status2.cs" />
+    <Compile Include="Game\Items\Weapon\ItemWeapon\Weapon1.cs" />
+    <Compile Include="Game\Items\Weapon\ItemWeapon\Weapon2.cs" />
+    <Compile Include="Game\Character\NPC\SampleNPC1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Character\Classes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
