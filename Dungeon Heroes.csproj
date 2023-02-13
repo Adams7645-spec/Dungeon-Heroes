@@ -45,13 +45,13 @@
   <ItemGroup>
     <Compile Include="Game\Dungeon\LevelDungeon\EasyDungeon.cs" />
     <Compile Include="Game\Dungeon\BlankDungeon.cs" />
-    <Compile Include="Game\Items\Armor\ItemArmor\Armor1.cs" />
+    <Compile Include="Game\Items\Armor\ItemArmor\TestArmor.cs" />
     <Compile Include="Game\Items\Armor\ItemArmor\Armor2.cs" />
     <Compile Include="Game\Items\Armor\BlankArmor.cs" />
     <Compile Include="Game\Items\Weapon\BlankWeapon.cs" />
     <Compile Include="Game\Status\BlankStatus.cs" />
     <Compile Include="Game\Character\BlankCharacter.cs" />
-    <Compile Include="Game\Character\Classes\SampleClass1.cs" />
+    <Compile Include="Game\Character\Classes\TestClass.cs" />
     <Compile Include="Game\Core\Game.cs" />
     <Compile Include="Game\Dungeon\LevelDungeon\HardDungeon.cs" />
     <Compile Include="Game\Dungeon\LevelDungeon\MediumDungeon.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="Game\Character\Classes\SampleClass5.cs" />
     <Compile Include="Game\Status\Conditions\Status1.cs" />
     <Compile Include="Game\Status\Conditions\Status2.cs" />
-    <Compile Include="Game\Items\Weapon\ItemWeapon\Weapon1.cs" />
+    <Compile Include="Game\Items\Weapon\ItemWeapon\TestWeapon.cs" />
     <Compile Include="Game\Items\Weapon\ItemWeapon\Weapon2.cs" />
     <Compile Include="Game\Character\NPC\SampleNPC1.cs" />
   </ItemGroup>

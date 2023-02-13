@@ -8,5 +8,8 @@ namespace Dungeon_Heroes
 {
     internal class SampleNPC1 : BlankCharacter
     {
+        public SampleNPC1(int health, int strengh, int defense) : base(health, strengh, defense)
+        {
+        }
     }
 }
