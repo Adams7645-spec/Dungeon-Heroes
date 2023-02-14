@@ -8,11 +8,10 @@ namespace Dungeon_Heroes
 {
     internal class TestClass : BlankCharacter
     {
-        public TestClass(int health, int strengh, int defense, string charName, string className) : base(health, strengh, defense)
+        public TestClass(int health, int strengh, int defense) : base(health, strengh, defense)
         {
-            this.className = className;
-            this.charName = charName;
-            
+            className = "TestClass";
+            charName = GenerateName(random.Next(4, 8));
         }
     }
 }

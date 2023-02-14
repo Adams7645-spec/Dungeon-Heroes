@@ -8,7 +8,7 @@ namespace Dungeon_Heroes
 {
     class BlankCharacter
     {
-        static Random random = new Random();
+        static protected Random random = new Random();
 
         //Поля
         //Базовые статы
@@ -30,6 +30,7 @@ namespace Dungeon_Heroes
 
         //Несчетные данные персонажа
         protected int charLevel;
+        protected int charExp;
 
         protected string charName;
         protected string className;
@@ -40,7 +41,24 @@ namespace Dungeon_Heroes
             this.baseHealth = baseHealth;
             this.baseStrengh = baseStrengh;
             this.baseDefense = baseDefense;
-            Recalculate();
+        }
+
+        //Генератор имен
+        static protected string GenerateName(int lenght) //Перенести генерацию в класс Game
+        {
+            string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v", "w", "x" };
+            string[] vowels = { "a", "e", "i", "o", "u", "ae", "y" };
+            string Name = "";
+            int b = 0;
+            while (b < lenght)
+            {
+                Name += consonants[random.Next(consonants.Length)];
+                b++;
+                Name += vowels[random.Next(vowels.Length)];
+                b++;
+            }
+
+            return Name;
         }
 
         //Методы для сражения
@@ -64,6 +82,8 @@ namespace Dungeon_Heroes
                 $"Health: {totalHealth}\n" +
                 $"Strengh: {totalStrengh}\n" +
                 $"Defense: {totalDefense}\n" +
+                $"Level: {charLevel}\n" +
+                $"Exp: {charExp}" +
                 $"\n" +
                 $"Is dead: {IsDead()}";
         }
@@ -86,12 +106,44 @@ namespace Dungeon_Heroes
         {
             return totalHealth <= 0;
         }
+
         //Взаимодействие с персонажем
-        private void Recalculate()//Пересчитываем статы 
+        //Метод необходимо вызывать при взаимодействии со статами персонажа 
+        public void RecalculateAll()//Пересчитываем статы 
         {
-            totalHealth = baseHealth + armorHealthBonus;
+            RecalculateLevel();
+            RecalculateStats();
+        }
+        public void RecalculateStats()
+        {
+            //Пересчет итоговых статов
+            totalHealth = baseHealth + +armorHealthBonus;
             totalStrengh = baseStrengh + weaponDamageBonus + armorDamageBonus;
             totalDefense = baseDefense + armorDefenseBonus;
+        }
+        public void RecalculateLevel()
+        {
+            int levelUpHealth = baseHealth / 10;
+            int levelUpStrengh = baseStrengh / 10;
+            int levelUpDefense = baseDefense / 10;
+
+            //Пересчет уровня персонажа 
+            while (true)
+            {
+                if (charExp >= 100)
+                {
+                    charLevel += 1;
+                    charExp -= 100;
+
+                    baseHealth += levelUpHealth;
+                    baseStrengh += levelUpStrengh;
+                    baseDefense += levelUpDefense;
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
         public void GetNewArmor(BlankArmor armor)
         {
@@ -99,13 +151,31 @@ namespace Dungeon_Heroes
             armorHealthBonus = baseHealth * armor.HealthBonus / 100;
             armorDefenseBonus = baseDefense * armor.DefenseBonus / 100;
 
-            Recalculate();
+            RecalculateAll();
         }
         public void GetNewWeapon(BlankWeapon weapon)
         {
             weaponDamageBonus = (baseStrengh + weapon.WeaponBaseDamage / 100) * weapon.DamageBonus / 100;
-            
-            Recalculate();
+
+            RecalculateAll();
+        }
+        public void GetNewLevel()
+        {
+            int levelUpHealth = 60;
+            int levelUpStrengh = 6;
+            int levelUpDefense = 10;
+            int levelThreshold = 100;
+
+            if (charExp >= levelThreshold)
+            {
+                baseHealth += levelUpHealth;
+                baseStrengh += levelUpStrengh;
+                baseDefense += levelUpDefense;
+            }
+        }
+        public void GetExp(int exp)
+        {
+            charExp += exp;
         }
     }
 }

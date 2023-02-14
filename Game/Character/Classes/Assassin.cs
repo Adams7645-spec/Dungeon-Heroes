@@ -8,10 +8,10 @@ namespace Dungeon_Heroes
 {
     internal class Assassin : BlankCharacter
     {
-        public Assassin(int health, int strengh, int defense, string charName, string className) : base(health, strengh, defense)
+        public Assassin(int health, int strengh, int defense) : base(health, strengh, defense)
         {
-            this.className = className;
-            this.charName = charName;
+            className = "Assassin";
+            charName = GenerateName(random.Next(4, 8));
         }
 
         public override void HitEnemy(BlankCharacter enemy)
