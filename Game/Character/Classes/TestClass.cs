@@ -8,11 +8,11 @@ namespace Dungeon_Heroes
 {
     internal class TestClass : BlankCharacter
     {
-        public TestClass(int baseHealth, int baseStrengh, int baseDefense) : base(baseHealth, baseStrengh, baseDefense)
+        public TestClass(int health, int strengh, int defense, string charName, string className) : base(health, strengh, defense)
         {
-            this.baseHealth = baseHealth;
-            this.baseStrengh = baseStrengh;
-            this.baseDefense = baseDefense;
+            this.className = className;
+            this.charName = charName;
+            
         }
     }
 }

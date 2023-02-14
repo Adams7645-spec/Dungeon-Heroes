@@ -10,58 +10,40 @@ namespace Dungeon_Heroes
     {
         static Random random = new Random();
 
-        //fields 
+        //Поля
+        //Базовые статы
         protected int baseHealth;
         protected int baseStrengh;
         protected int baseDefense;
 
+        //Итоговые статы
         protected int totalHealth;
         protected int totalStrengh;
         protected int totalDefense;
 
+        //Бонусные статы
         protected int weaponDamageBonus;
 
         protected int armorDamageBonus;
         protected int armorHealthBonus;
         protected int armorDefenseBonus;
 
+        //Несчетные данные персонажа
         protected int charLevel;
 
         protected string charName;
         protected string className;
 
-        //constructor
+        //Конструктор 
         public BlankCharacter(int baseHealth, int baseStrengh, int baseDefense)
         {
             this.baseHealth = baseHealth;
             this.baseStrengh = baseStrengh;
             this.baseDefense = baseDefense;
-
-            totalHealth = baseHealth + armorHealthBonus;
-            totalStrengh = baseStrengh + weaponDamageBonus + armorDamageBonus;
-            totalDefense = baseDefense + armorDefenseBonus;
-
-            charName = GenerateName(random.Next(4, 8));
-        }
-        //name generator 
-        public static string GenerateName(int lenght)
-        {
-            string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "sh", "zh", "t", "v", "w", "x" };
-            string[] vowels = { "a", "e", "i", "o", "u", "ae", "y" };
-            string Name = "";
-            int b = 0;
-            while (b < lenght)
-            {
-                Name += consonants[random.Next(consonants.Length)];
-                b++;
-                Name += vowels[random.Next(vowels.Length)];
-                b++;
-            }
-
-            return Name;
+            Recalculate();
         }
 
-        //fighting methods 
+        //Методы для сражения
         //Для реализации урона от способности переопределяем HitEnemy и TakeDamage
         public virtual void HitEnemy(BlankCharacter enemy)
         {
@@ -70,11 +52,11 @@ namespace Dungeon_Heroes
         }
         public virtual void TakeDamage(int damage)
         {
-            totalHealth -= damage - (damage * totalDefense / 100);
+            totalHealth -= damage;
             Console.WriteLine($"{CharInfo()} получил урон {damage}");
         }
-        //character information  methods
-        public string CharBrief()
+        //Методы вывода информации о персонаже
+        public string CharBrief()//Основной вывод информации
         {
             return $"Class: {className}\n" +
                 $"Name: {charName}\n" +
@@ -85,7 +67,7 @@ namespace Dungeon_Heroes
                 $"\n" +
                 $"Is dead: {IsDead()}";
         }
-        public string BaseCharBrief()
+        public string BaseCharBrief()//Вывод для тестов правильности пересчета статов при получении брони/оружия
         {
             return $"Class: {className}\n" +
                 $"Name: {charName}\n" +
@@ -104,8 +86,8 @@ namespace Dungeon_Heroes
         {
             return totalHealth <= 0;
         }
-        //Character interaction 
-        private void Recalculate()//calculate stats
+        //Взаимодействие с персонажем
+        private void Recalculate()//Пересчитываем статы 
         {
             totalHealth = baseHealth + armorHealthBonus;
             totalStrengh = baseStrengh + weaponDamageBonus + armorDamageBonus;

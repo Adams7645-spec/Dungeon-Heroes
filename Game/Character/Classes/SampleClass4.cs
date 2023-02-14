@@ -8,7 +8,7 @@ namespace Dungeon_Heroes
 {
     internal class SampleClass4 : BlankCharacter
     {
-        public SampleClass4(int health, int strengh, int defense) : base(health, strengh, defense)
+        public SampleClass4(int health, int strengh, int defense, string charName, string className) : base(health, strengh, defense)
         {
         }
     }
