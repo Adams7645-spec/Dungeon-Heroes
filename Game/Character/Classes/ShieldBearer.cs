@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Dungeon_Heroes
 {
-    internal class TestClass : BlankCharacter
+    internal class ShieldBearer : BlankCharacter
     {
-        public TestClass(int health, int strengh, int defense) : base(health, strengh, defense)
+        public ShieldBearer(int health, int strengh, int defense) : base(health, strengh, defense)
         {
             className = "TestClass";
             charName = GenerateName(random.Next(4, 8));

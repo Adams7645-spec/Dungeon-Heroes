@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Dungeon_Heroes
 {
-    internal class SampleClass3 : BlankCharacter
+    internal class Paladin : BlankCharacter
     {
-        public SampleClass3(int health, int strengh, int defense) : base(health, strengh, defense)
+        public Paladin(int health, int strengh, int defense) : base(health, strengh, defense)
         {
         }
     }

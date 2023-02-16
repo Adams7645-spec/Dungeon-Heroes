@@ -51,15 +51,16 @@
     <Compile Include="Game\Items\Weapon\BlankWeapon.cs" />
     <Compile Include="Game\Status\BlankStatus.cs" />
     <Compile Include="Game\Character\BlankCharacter.cs" />
-    <Compile Include="Game\Character\Classes\TestClass.cs" />
+    <Compile Include="Game\Character\Classes\ShieldBearer.cs" />
     <Compile Include="Game\Core\Game.cs" />
     <Compile Include="Game\Dungeon\LevelDungeon\HardDungeon.cs" />
     <Compile Include="Game\Dungeon\LevelDungeon\MediumDungeon.cs" />
+    <Compile Include="Game\Core\GameInterfaces\StartScreenInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\Character\Classes\Assassin.cs" />
-    <Compile Include="Game\Character\Classes\SampleClass3.cs" />
-    <Compile Include="Game\Character\Classes\SampleClass4.cs" />
-    <Compile Include="Game\Character\Classes\SampleClass5.cs" />
+    <Compile Include="Game\Character\Classes\Gunslinger.cs" />
+    <Compile Include="Game\Character\Classes\Paladin.cs" />
+    <Compile Include="Game\Character\Classes\Priest.cs" />
     <Compile Include="Game\Status\Conditions\Status1.cs" />
     <Compile Include="Game\Status\Conditions\Status2.cs" />
     <Compile Include="Game\Items\Weapon\ItemWeapon\TestWeapon.cs" />
@@ -72,5 +73,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
