@@ -117,7 +117,7 @@ namespace Dungeon_Heroes
         public void RecalculateStats()
         {
             //Пересчет итоговых статов
-            totalHealth = baseHealth + +armorHealthBonus;
+            totalHealth = baseHealth + armorHealthBonus;
             totalStrengh = baseStrengh + weaponDamageBonus + armorDamageBonus;
             totalDefense = baseDefense + armorDefenseBonus;
         }

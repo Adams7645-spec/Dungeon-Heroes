@@ -9,11 +9,14 @@ namespace Dungeon_Heroes
 {
     class StartScreenInterface
     {
+        DrawingInterface drawer = new DrawingInterface();
+
         //Устанавливаем параметры игрового окна
         public void SetGameWindow()
         {
             Console.Title = "Dungeon Heroes";
             Console.SetWindowSize(100, 35);
+            Console.CursorVisible = false;
         }
 
         //Вывод начального экрана
@@ -24,34 +27,6 @@ namespace Dungeon_Heroes
             PrintBackgroundRight();
             PrintBackgroungCenter();
             PrintMainMenu();
-        }
-        
-        //Метод для центрирования текста (ВЕРТИКАЛЬНАЯ плоскость не учитывается)
-        private void CenterText(String text)
-        {
-            Console.Write(new string(' ', (Console.WindowWidth - text.Length) / 2));
-            Console.WriteLine(text);
-        }
-
-        //Вывод центрированного рисунка ASCII
-        private void PrintASCIICentered(string[] asciiPicture)
-        {
-            for (int i = 0; i < asciiPicture.Length; i++)
-            {
-                CenterText($@"{asciiPicture[i]}");
-                Thread.Sleep(10);
-            }
-        }
-
-        //Вывод рисунка ASCII на определенные координаты в консоли
-        private void PrintASCIIAtPosition(string[] asciiPicture, int marginWight, int marginHight)
-        {
-            for (int i = 0; i < asciiPicture.Length; i++)
-            {
-                Console.SetCursorPosition(marginWight, marginHight + i);
-                Console.WriteLine($@"{asciiPicture[i]}");
-                Thread.Sleep(10);
-            }
         }
         private void PrintGameLogo()
         {
@@ -64,7 +39,7 @@ namespace Dungeon_Heroes
                 $@"                  /____/                                                       "};
             Console.ForegroundColor = ConsoleColor.Cyan;
 
-            PrintASCIICentered(asciiGameLogo);
+            drawer.PrintASCIICentered(asciiGameLogo);
 
             Console.ResetColor();
         }
@@ -94,7 +69,7 @@ namespace Dungeon_Heroes
             };
             Console.ForegroundColor = ConsoleColor.Green;
 
-            PrintASCIIAtPosition(asciiKnight, 5, 7);
+            drawer.PrintASCIIAtPosition(asciiKnight, 5, 7);
 
             Console.ResetColor();
         }
@@ -120,7 +95,7 @@ namespace Dungeon_Heroes
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
 
-            PrintASCIIAtPosition(asciiAxe, 42, 10);
+            drawer.PrintASCIIAtPosition(asciiAxe, 42, 10);
 
             Console.ResetColor();
         }
@@ -143,7 +118,7 @@ namespace Dungeon_Heroes
                                                   $@"          '       (          "};
             Console.ForegroundColor = ConsoleColor.Red;
 
-            PrintASCIIAtPosition(asciiDragon, Console.WindowWidth - 34, 11);
+            drawer.PrintASCIIAtPosition(asciiDragon, Console.WindowWidth - 34, 11);
 
             Console.ResetColor();
         }
@@ -153,6 +128,7 @@ namespace Dungeon_Heroes
             string pressAnyButton = "Нажмите любую кнопку, чтобы продолжить...";
             Console.SetCursorPosition((Console.WindowWidth - pressAnyButton.Length) / 2, 30);
             Console.WriteLine(pressAnyButton);
+            Console.ReadKey();
         }
     }
 }
