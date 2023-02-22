@@ -44,5 +44,14 @@ namespace Dungeon_Heroes
                 Thread.Sleep(10);
             }
         }
+
+        //Вывод центрированного желтого информирующего текста вниз экрана
+        public void PrintPressAnyKeyLikeText(string Text)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.SetCursorPosition((Console.WindowWidth - Text.Length) / 2, 30);
+            Console.WriteLine(Text);
+            Console.ReadKey();
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Dungeon_Heroes
             PrintBackgroundLeft();
             PrintBackgroundRight();
             PrintBackgroungCenter();
-            PrintMainMenu();
+            drawer.PrintPressAnyKeyLikeText("Нажмите любую кнопку, чтобы продолжить...");
         }
         private void PrintGameLogo()
         {
@@ -121,14 +121,6 @@ namespace Dungeon_Heroes
             drawer.PrintASCIIAtPosition(asciiDragon, Console.WindowWidth - 34, 11);
 
             Console.ResetColor();
-        }
-        private void PrintMainMenu()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            string pressAnyButton = "Нажмите любую кнопку, чтобы продолжить...";
-            Console.SetCursorPosition((Console.WindowWidth - pressAnyButton.Length) / 2, 30);
-            Console.WriteLine(pressAnyButton);
-            Console.ReadKey();
         }
     }
 }

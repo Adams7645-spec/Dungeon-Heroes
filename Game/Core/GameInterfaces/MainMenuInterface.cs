@@ -9,8 +9,9 @@ namespace Dungeon_Heroes
     internal class MainMenuInterface
     {
         DrawingInterface drawer = new DrawingInterface();
-        int option = 1;
-        public int Option { get => option; }
+        UserOptionsInteraction interaction = new UserOptionsInteraction(mainMenuOptions);
+
+        static List<string> mainMenuOptions = new List<string> { "Начать игру", "Настройки", "Выход" };
 
         //Вывод менюшки на экран 
         public void ShowMainMenuScreen()
@@ -18,8 +19,8 @@ namespace Dungeon_Heroes
             Console.Clear();
 
             PrintBackground();
-            SelectOption();
-            ChooseOption();
+            interaction.SelectOption();
+            ChooseOption(interaction.OptionCounter);
         }
         
         //Доступные для выбора опции 
@@ -38,39 +39,6 @@ namespace Dungeon_Heroes
         private void Exit()
         {
             Environment.Exit(0);
-        }
-
-        //Выбираем опцию
-        private void SelectOption()
-        {
-            ConsoleKeyInfo key;
-
-            Console.CursorVisible = false;
-
-            bool isSelected = false;
-            string prefix = "\u001a";
-
-            while (!isSelected)
-            {
-                drawer.PositionText($"{(option == 1 ? prefix : "")} Начать игру! ", (Console.WindowWidth - 14) / 2, 11);
-                drawer.PositionText($"{(option == 2 ? prefix : "")} Перейти в настройки ", (Console.WindowWidth - 21) / 2, 13);
-                drawer.PositionText($"{(option == 3 ? prefix : "")} Выйти ", (Console.WindowWidth - 7) / 2, 15);
-
-                key = Console.ReadKey(true);
-
-                switch (key.Key)
-                {
-                    case ConsoleKey.S:
-                        option = (option == 3 ? 1 : option + 1);
-                        break;
-                    case ConsoleKey.W:
-                        option = (option == 1 ? 3 : option - 1);
-                        break;
-                    case ConsoleKey.Enter:
-                        isSelected = true;
-                        break;
-                }
-            }
         }
 
         //Рисуем задники
@@ -123,17 +91,17 @@ namespace Dungeon_Heroes
         }
 
         //Вызываем выбранную опцию
-        private void ChooseOption()
+        private void ChooseOption(int Option)
         {
             switch (Option)
             {
-                case 1:
+                case 0:
                     StartGame();
                     break;
-                case 2:
+                case 1:
                     Settings();
                     break;
-                case 3:
+                case 2:
                     Exit();
                     break;
             }

@@ -100,6 +100,7 @@
     <Compile Include="Game\Items\Weapon\ItemWeapon\Weapon2.cs" />
     <Compile Include="Game\Character\NPC\SampleNPC1.cs" />
     <Compile Include="Game\Core\GameInterfaces\SettingsInterface.cs" />
+    <Compile Include="Game\Core\GameInterfaces\Drawing\UserOptionsInteraction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
