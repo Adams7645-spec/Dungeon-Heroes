@@ -19,7 +19,7 @@ namespace Dungeon_Heroes
             Console.Clear();
 
             PrintBackground();
-            interaction.SelectOption();
+            interaction.SelectOption(45, 13);
             ChooseOption(interaction.OptionCounter);
         }
         

@@ -9,7 +9,6 @@ namespace Dungeon_Heroes
 {
     internal class CoreProcess
     {
-        static Random random = new Random();
         static StartScreenInterface startScreenInterface = new StartScreenInterface();
         static MainMenuInterface menuInterface = new MainMenuInterface();
         static void Main(string[] args)

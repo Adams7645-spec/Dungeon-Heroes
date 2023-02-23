@@ -39,6 +39,12 @@ namespace Dungeon_Heroes
         protected string charName;
         protected string className;
 
+        public int TotalHealth { get => totalHealth; }
+        public int TotalStrengh { get => totalStrengh; }
+        public int TotalDefense { get => totalDefense; }
+        public int CharLevel { get => charLevel; }
+        public int CharExp { get => charExp; }
+
         //Конструктор 
         public BlankCharacter(int baseHealth, int baseStrengh, int baseDefense)
         {

@@ -18,7 +18,7 @@ namespace Dungeon_Heroes
             this.options = options;
             optionCounter = 0;
         }
-        public void SelectOption()
+        public void SelectOption(int MarginLeft, int MarginTop)
         {
             ConsoleKeyInfo key;
 
@@ -43,8 +43,8 @@ namespace Dungeon_Heroes
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.BackgroundColor = ConsoleColor.Black;
                     }
-                    drawer.PositionText($"{options[i]}", 45, 13 + i);
-                    drawer.PositionText($"{prefix}", 42, 13 + i);
+                    drawer.PositionText($"{options[i]}", MarginLeft, MarginTop + i);
+                    drawer.PositionText($"{prefix}", MarginLeft - 3, MarginTop + i);
                     Console.ResetColor();
                 }
 

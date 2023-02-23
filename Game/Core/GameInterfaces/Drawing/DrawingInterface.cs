@@ -51,7 +51,62 @@ namespace Dungeon_Heroes
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.SetCursorPosition((Console.WindowWidth - Text.Length) / 2, 30);
             Console.WriteLine(Text);
+            Console.ResetColor();
             Console.ReadKey();
+        }
+
+        //Вывод информации о всех персонажах игрока
+        public void PrintTeamBrief(List<BlankCharacter> TeamList, int marginLeft, int marginTop)
+        {
+            int increment = 0;
+            for (int i = 0; i < TeamList.Count; i++)
+            {
+                if (i < 2)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    PositionText($"{TeamList[i].CharInfo()}", marginLeft + increment, marginTop + 0);
+                    Console.ResetColor();
+                    PositionText($"Сила: {TeamList[i].TotalStrengh}", marginLeft + increment, marginTop + 1);
+                    PositionText($"Защита: {TeamList[i].TotalDefense}", marginLeft + increment, marginTop + 2);
+                    PositionText($"Опыт: {TeamList[i].CharExp}", marginLeft + increment, marginTop + 3);
+                    PositionText($"Уровень: {TeamList[i].CharLevel}", marginLeft + increment, marginTop + 4);
+
+                    increment = 40;
+                }
+                else
+                {
+                    if (i == 2)
+                    {
+                        increment = 0;
+                    }
+                    else
+                    {
+                        increment = 40;
+                    }
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    PositionText($"{TeamList[i].CharInfo()}", marginLeft + increment, marginTop + 6);
+                    Console.ResetColor();
+                    PositionText($"Сила: {TeamList[i].TotalStrengh}", marginLeft + increment, marginTop + 7);
+                    PositionText($"Защита: {TeamList[i].TotalDefense}", marginLeft + increment, marginTop + 8);
+                    PositionText($"Опыт: {TeamList[i].CharExp}", marginLeft + increment, marginTop + 9);
+                    PositionText($"Уровень: {TeamList[i].CharLevel}", marginLeft + increment, marginTop + 10);
+                }
+            }
+        }
+
+        //Вывод информации о сложности игрового мира
+        public void PrintWorldInfo(int marginLeft, int marginTop)
+        {
+            DifficultyLevel difficulty = new DifficultyLevel();
+
+            PositionText($"Информация об игровом мире: ", marginLeft, marginTop);
+            PositionText($"Выбранный уровень сложности: {difficulty.DifficultyName}", marginLeft, marginTop + 1);
+            PositionText($"Уровень врагов: ", marginLeft, marginTop + 2);
+            PositionText($"Множитель золота за сложность: {difficulty.AdictionalKillGold}", marginLeft, marginTop + 3);
+            PositionText($"Множитель опыта за сложность: {difficulty.AdictionalKillExp}", marginLeft, marginTop + 4);
+
+            //перенести в другое окно
+            PositionText($"Совет", marginLeft, marginTop + 5);
         }
     }
 }

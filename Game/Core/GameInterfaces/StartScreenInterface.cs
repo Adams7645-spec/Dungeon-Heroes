@@ -19,7 +19,7 @@ namespace Dungeon_Heroes
             Console.CursorVisible = false;
         }
 
-        //Вывод начального экрана
+        //Вывод начального экрана 
         public void ShowStartScreen()
         {
             PrintGameLogo();

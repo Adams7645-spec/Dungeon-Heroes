@@ -18,7 +18,7 @@ namespace Dungeon_Heroes
         {
             Console.Clear();
 
-            interaction.SelectOption();
+            interaction.SelectOption(45, 13);
             SetDifficulty(interaction.OptionCounter);
 
             Console.ReadKey();

@@ -9,20 +9,20 @@ namespace Dungeon_Heroes
     internal class DifficultyLevel
     {
         //МНОЖИТЕЛЬ бонуса стата за сложность 
-        private double adictionalNPCHealth = 1;
-        private double adictionalNPCStrenght = 1;
-        private double adictionalNPCDefense = 1;
+        static private double adictionalNPCHealth = 1;
+        static private double adictionalNPCStrenght = 1;
+        static private double adictionalNPCDefense = 1;
 
         //МНОЖИТЕЛЬ бонуса урона за сложность 
-        private double adictionalEventDamage = 1;
+        static private double adictionalEventDamage = 1;
 
         //МНОЖИТЕЛЬ бонуса за сложность 
-        private double adictionalChestGold = 1;
-        private double adictionalKillGold = 1;
-        private double adictionalKillExp = 1;
+        static private double adictionalChestGold = 1;
+        static private double adictionalKillGold = 1;
+        static private double adictionalKillExp = 1;
 
         //Имя выбранной сложности
-        private string difficultyName = "Легкая";
+        static private string difficultyName = "Легкий";
 
         public double AdictionalNPCHealth { get => adictionalNPCHealth; }
         public double AdictionalNPCStrenght { get => adictionalNPCStrenght; }
@@ -35,7 +35,7 @@ namespace Dungeon_Heroes
 
         public void SetEasyDiff()
         {
-            difficultyName = "Легкая";
+            difficultyName = "Легкий";
 
             adictionalNPCHealth = 1;
             adictionalNPCStrenght = 1;
@@ -47,7 +47,7 @@ namespace Dungeon_Heroes
         }
         public void SetMidDiff()
         {
-            difficultyName = "Средняя";
+            difficultyName = "Средний";
 
             adictionalNPCHealth = 1.5;
             adictionalNPCStrenght = 1.5;
@@ -59,7 +59,7 @@ namespace Dungeon_Heroes
         }
         public void SetHardDiff()
         {
-            difficultyName = "Тяжелая";
+            difficultyName = "Тяжелый";
 
             adictionalNPCHealth = 2.25;
             adictionalNPCStrenght = 2.25;

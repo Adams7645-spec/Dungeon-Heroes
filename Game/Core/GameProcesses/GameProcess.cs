@@ -16,11 +16,13 @@ namespace Dungeon_Heroes
         public void Game()
         {
             Console.Clear();
-            PlayerCreation();
+            CreatePlayerTeam();
+            ShowBeginningScreen();
+            Console.Read();
 
             menu.ShowMainMenuScreen();
         }
-        private void PlayerCreation()
+        private void CreatePlayerTeam()
         {
             List<string> options = new List<string> { "Выбрать Assassin", "Выбрать Gunslinger",
                                                       "Выбрать Paladin", "Выбрать Priest",
@@ -32,7 +34,7 @@ namespace Dungeon_Heroes
                 drawer.PositionText($"Персонаж №{i + 1}", (Console.WindowWidth - 11) / 2, 3);
                 drawer.PositionText($"Выберите желаемого персонажа:", (Console.WindowWidth - 29) / 2, 4);
 
-                interaction.SelectOption();
+                interaction.SelectOption(41, 12);
 
                 switch (interaction.OptionCounter)
                 {
@@ -66,6 +68,13 @@ namespace Dungeon_Heroes
                 drawer.PositionText($"{i + 1}){PlayerTeam[i].CharInfo()}", 5, 10 + i);
             }
             drawer.PrintPressAnyKeyLikeText("Персонажи выбраны! Нажмите, чтобы продолжить...");
+        }
+        private void ShowBeginningScreen()
+        {
+            Console.Clear();
+            drawer.PrintTeamBrief(PlayerTeam, 20, 3);
+            drawer.PrintWorldInfo(20, 18);
+            drawer.PrintPressAnyKeyLikeText("Нажмите, чтобы начать приключение!");
         }
 
         //while (true)
