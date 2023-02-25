@@ -13,6 +13,9 @@ namespace Dungeon_Heroes
         static private double adictionalNPCStrenght = 1;
         static private double adictionalNPCDefense = 1;
 
+        //Максимальное кол-во врагов в комнате
+        static private int maxEnemyAtRoom = 1;
+
         //МНОЖИТЕЛЬ бонуса урона за сложность 
         static private double adictionalEventDamage = 1;
 
@@ -32,6 +35,7 @@ namespace Dungeon_Heroes
         public double AdictionalKillGold { get => adictionalKillGold; }
         public double AdictionalKillExp { get => adictionalKillExp; }
         public string DifficultyName { get => difficultyName; }
+        public double MaxEnemyAtRoom { get => maxEnemyAtRoom; }
 
         public void SetEasyDiff()
         {
@@ -41,9 +45,12 @@ namespace Dungeon_Heroes
             adictionalNPCStrenght = 1;
             adictionalNPCDefense = 1;
             adictionalEventDamage = 1;
+
             adictionalChestGold = 1;
             adictionalKillGold = 1;
             adictionalKillExp = 1;
+
+            maxEnemyAtRoom = 1;
         }
         public void SetMidDiff()
         {
@@ -53,9 +60,12 @@ namespace Dungeon_Heroes
             adictionalNPCStrenght = 1.5;
             adictionalNPCDefense = 1.5;
             adictionalEventDamage = 1.5;
+
             adictionalChestGold = 1.5;
             adictionalKillGold = 1.5;
             adictionalKillExp = 1.5;
+
+            maxEnemyAtRoom = 2;
         }
         public void SetHardDiff()
         {
@@ -65,9 +75,12 @@ namespace Dungeon_Heroes
             adictionalNPCStrenght = 2.25;
             adictionalNPCDefense = 2.25;
             adictionalEventDamage = 2.25;
+
             adictionalChestGold = 2.25;
             adictionalKillGold = 2.25;
             adictionalKillExp = 2.25;
+
+            maxEnemyAtRoom = 3;
         }
     }
 }

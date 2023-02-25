@@ -10,6 +10,8 @@ namespace Dungeon_Heroes
     {
         public SampleNPC1(int health, int strengh, int defense) : base(health, strengh, defense)
         {
+            className = "SampleNPC1";
+            charName = "Sample Monster";
         }
     }
 }
