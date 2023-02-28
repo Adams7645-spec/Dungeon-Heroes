@@ -89,6 +89,7 @@
     <Compile Include="Game\Dungeon\LevelDungeon\MediumDungeon.cs" />
     <Compile Include="Game\Core\GameInterfaces\StartScreenInterface.cs" />
     <Compile Include="Game\Core\GameInterfaces\MainMenuInterface.cs" />
+    <Compile Include="Game\Core\GameProcesses\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\Character\Classes\Assassin.cs" />
     <Compile Include="Game\Character\Classes\Gunslinger.cs" />

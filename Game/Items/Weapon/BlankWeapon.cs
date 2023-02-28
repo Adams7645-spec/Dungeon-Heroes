@@ -14,6 +14,8 @@ namespace Dungeon_Heroes
 
         public int WeaponBaseDamage { get => weaponBaseDamage; }
         public int DamageBonus { get => damageBonus; }
+        public string WeaponName { get => weaponName; }
+
         public BlankWeapon(int weaponBaseDamage, int damageBonus, string weaponName)
         {
             this.weaponBaseDamage = weaponBaseDamage;

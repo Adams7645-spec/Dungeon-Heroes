@@ -18,12 +18,14 @@ namespace Dungeon_Heroes
         public int HealthBonus { get => healthBonus; }
         public int StrenghBonus { get => strenghBonus; }
         public int DefenseBonus { get => defenseBonus; }
+        public string ArmorName { get => armorName; }
 
-        public BlankArmor(int healthBonus, int strenghBonus, int defenseBonus)
+        public BlankArmor(int healthBonus, int strenghBonus, int defenseBonus, string armorName)
         {
             this.healthBonus = healthBonus;
             this.strenghBonus = strenghBonus;
             this.defenseBonus = defenseBonus;
+            this.armorName = armorName;
         }
         //armor passive skill 
     }

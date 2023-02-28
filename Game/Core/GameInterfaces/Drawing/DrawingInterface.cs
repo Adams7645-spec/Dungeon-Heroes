@@ -23,6 +23,36 @@ namespace Dungeon_Heroes
             Console.WriteLine($@"{text}");
             Thread.Sleep(10);
         }
+        public void PositionGreenColorText(String text, int marginLeft, int marginTop)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            Console.SetCursorPosition(marginLeft, marginTop + 1);
+            Console.WriteLine($@"{text}");
+            Thread.Sleep(10);
+
+            Console.ResetColor();
+        }
+        public void PositionRedColorText(String text, int marginLeft, int marginTop)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.SetCursorPosition(marginLeft, marginTop + 1);
+            Console.WriteLine($@"{text}");
+            Thread.Sleep(10);
+
+            Console.ResetColor();
+        }
+        public void PositionYelowColorText(String text, int marginLeft, int marginTop)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+
+            Console.SetCursorPosition(marginLeft, marginTop + 1);
+            Console.WriteLine($@"{text}");
+            Thread.Sleep(10);
+
+            Console.ResetColor();
+        }
 
         //Вывод центрированного рисунка ASCII
         public void PrintASCIICentered(string[] asciiPicture)
@@ -107,6 +137,23 @@ namespace Dungeon_Heroes
 
             //перенести в другое окно
             PositionText($"Совет", marginLeft, marginTop + 5);
+        }
+        public void PrintCharBrief(List<BlankCharacter> TeamList, int marginLeft, int marginTop, int selectedCharId, int OneGreenTwoRedColor)
+        {
+            switch (OneGreenTwoRedColor)
+            {
+                case 1:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+            }
+            PositionText($"Имя: {TeamList[selectedCharId].CharName}", marginLeft, marginTop + 0);
+            Console.ResetColor();
+            PositionText($"Здоровье: {TeamList[selectedCharId].TotalHealth}", marginLeft, marginTop + 1);
+            PositionText($"Сила: {TeamList[selectedCharId].TotalStrengh}", marginLeft, marginTop + 2);
+            PositionText($"Защита: {TeamList[selectedCharId].TotalDefense}", marginLeft, marginTop + 3);
         }
     }
 }

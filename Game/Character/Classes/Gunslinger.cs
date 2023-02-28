@@ -20,7 +20,6 @@ namespace Dungeon_Heroes
             {
                 if (rnd.Next(10) >= 10)
                 {
-                    Console.WriteLine($"{CharInfo()} делает рывок за спину {enemy.CharInfo()}");
                     enemy.TakeDamage(totalStrengh + totalStrengh * rnd.Next(50, 100) / 100);
                 }
                 else
@@ -32,7 +31,6 @@ namespace Dungeon_Heroes
             {
                 if (rnd.Next(10) >= 10)
                 {
-                    Console.WriteLine($"{CharInfo()} кидает кинжал в {enemy.CharInfo()}");
                     enemy.TakeDamage(totalStrengh + totalStrengh * rnd.Next(30, 60) / 100);
                 }
                 else

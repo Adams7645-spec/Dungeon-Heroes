@@ -88,6 +88,9 @@ namespace Dungeon_Heroes
             drawer.PositionText("W - вверх", 85, 0);
             drawer.PositionText("S - вниз", 85, 1);
             drawer.PositionText("Enter - выбрать", 85, 2);
+
+            //Информация о версии
+            drawer.PositionText("Alpha V0.1", 88, 32);
         }
 
         //Вызываем выбранную опцию

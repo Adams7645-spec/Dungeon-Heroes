@@ -8,7 +8,7 @@ namespace Dungeon_Heroes
 {
     internal class TestArmor : BlankArmor
     {
-        public TestArmor(int healthBonus, int strenghBonus, int defenseBonus) : base(healthBonus, strenghBonus, defenseBonus)
+        public TestArmor(int healthBonus, int strenghBonus, int defenseBonus, string armorName) : base(healthBonus, strenghBonus, defenseBonus, armorName)
         {
             this.healthBonus = healthBonus;
             this.strenghBonus = strenghBonus;

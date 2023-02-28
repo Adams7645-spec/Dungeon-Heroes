@@ -9,6 +9,7 @@ namespace Dungeon_Heroes
     class BlankCharacter
     {
         static protected Random random = new Random();
+        static protected Logger logger = new Logger();
 
         //Базовые статы
         protected int baseHealth;
@@ -44,6 +45,8 @@ namespace Dungeon_Heroes
         public int TotalDefense { get => totalDefense; }
         public int CharLevel { get => charLevel; }
         public int CharExp { get => charExp; }
+        public string CharName { get => charName; }
+        public int CharMoney { get => charMoney; }
 
         //Конструктор 
         public BlankCharacter(int baseHealth, int baseStrengh, int baseDefense)
@@ -81,13 +84,25 @@ namespace Dungeon_Heroes
         //Для реализации урона от способности переопределяем HitEnemy и TakeDamage
         public virtual void HitEnemy(BlankCharacter enemy)
         {
-            Console.WriteLine($"{CharInfo()} атакует {enemy.CharInfo()}");
+            logger.AddNewLog(HitEnemyLog(enemy));
             enemy.TakeDamage(totalStrengh);
+        }
+        public virtual void AbilityHitEnemy(BlankCharacter enemy)
+        {
         }
         public virtual void TakeDamage(int damage)
         {
             totalHealth -= damage;
-            Console.WriteLine($"{CharInfo()} получил урон {damage}");
+            logger.AddNewLog($"{charName} получил {damage} урона");
+        }
+        //Информация для логгера
+        public virtual string HitEnemyLog(BlankCharacter enemy)
+        {
+            return $"{enemy.charName} получает {totalStrengh} урона!";
+        }
+        public virtual string AbilityHitEnemyLog(BlankCharacter enemy)
+        {
+            return $"{enemy.charName} теряет {totalStrengh} здоровья!";
         }
 
         //Методы вывода информации о персонаже
@@ -175,10 +190,11 @@ namespace Dungeon_Heroes
         public void GetExp(int exp)
         {
             charExp += exp;
+            GetNewLevel();
         }
         public void GetMoney(int money)
         {
-            charExp += money;
+            charMoney += money;
         }
     }
 }

@@ -16,13 +16,15 @@ namespace Dungeon_Heroes
 
         public override void HitEnemy(BlankCharacter enemy)
         {
+            base.HitEnemy(enemy);
+        }
+        public override void AbilityHitEnemy(BlankCharacter enemy)
+        {
             if (random.Next(2) > 1)
             {
                 if (random.Next(10) >= 8)
                 {
-                    Console.WriteLine($"{CharInfo()} делает рывок за спину {enemy.CharInfo()}", Console.ForegroundColor = ConsoleColor.Red);
                     enemy.TakeDamage(totalStrengh + totalStrengh * random.Next(50, 100) / 100);
-                    Console.ResetColor();
                 }
                 else
                 {
@@ -33,9 +35,7 @@ namespace Dungeon_Heroes
             {
                 if (random.Next(10) >= 5)
                 {
-                    Console.WriteLine($"{CharInfo()} кидает кинжал в {enemy.CharInfo()}", Console.ForegroundColor = ConsoleColor.Red);
                     enemy.TakeDamage(totalStrengh + totalStrengh * random.Next(30, 60) / 100);
-                    Console.ResetColor();
                 }
                 else
                 {

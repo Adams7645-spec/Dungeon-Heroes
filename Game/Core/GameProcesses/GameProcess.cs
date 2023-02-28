@@ -14,7 +14,14 @@ namespace Dungeon_Heroes
         MainMenuInterface menu = new MainMenuInterface();
         DrawingInterface drawer = new DrawingInterface();
 
+        int generalGold;
+        int newGold;
+        int newExp;
+
         List<BlankCharacter> PlayerTeam = new List<BlankCharacter> { };
+        List<BlankWeapon> WeaponList = new List<BlankWeapon> { };
+        List<BlankArmor> ArmorList = new List<BlankArmor> { };
+        List<string> ChooseAlly = new List<string> { };
         public void Game()
         {
             Console.Clear();
@@ -22,10 +29,9 @@ namespace Dungeon_Heroes
             CreatePlayerTeam();
             ShowBeginningScreen();
 
-            //testing fights
-            FightWithEnemyEvent();
+            //Реализовать основной метод Adventure, где мы можем бродить по карте, искать сокровища или врагов
 
-            Console.Read();
+            FightWithEnemyEvent();
 
             menu.ShowMainMenuScreen();
         }
@@ -110,16 +116,14 @@ namespace Dungeon_Heroes
         }
         private void FightWithEnemyEvent()
         {
-            Console.Clear();
+            Logger logger = new Logger();
 
-            List<string> ChooseAlly = new List<string> { };
             List<string> ChooseEnemy = new List<string> { };
+            List<string> ChooseAction = new List<string> { "Атака", "Способность", "Побег!" };
 
-            UserOptionsInteraction interactionChooseAlly = new UserOptionsInteraction(ChooseAlly);
-            UserOptionsInteraction interactionChooseEnemy = new UserOptionsInteraction(ChooseEnemy);
-
-            //Заполнение команды соперников 
+            //Заполнение команды противников 
             List<BlankCharacter> EnemyTeam = new List<BlankCharacter> { };
+
             while (EnemyTeam.Count < difficulty.MaxEnemyAtRoom)
             {
                 //Добавить больше противников и сделать рандомную генерацию
@@ -130,40 +134,184 @@ namespace Dungeon_Heroes
                 EnemyTeam.Add(enemy);
             }
 
-            //Создаем список для выбора персонажа при помощи опций
+            Console.Clear();
 
             //Механика сражения
             drawer.PositionText("На вас напали!", 30, 5);
-
             while (EnemyTeam.Count != 0)
             {
+                RebuildTeam(ChooseEnemy, EnemyTeam);
+                RebuildTeam(ChooseAlly, PlayerTeam);
+
                 Console.Clear();
-                for (int i = 0; ChooseAlly.Count < PlayerTeam.Count; i++)
-                {
-                    ChooseAlly.Add(PlayerTeam[i].CharInfo());
-                }
-                for (int i = 0; ChooseEnemy.Count < EnemyTeam.Count; i++)
-                {
-                    ChooseEnemy.Add(EnemyTeam[i].CharInfo());
-                }
 
-                interactionChooseAlly.SelectOption(50, 5);
-                interactionChooseEnemy.SelectOption(50, 10);
+                //Экземпляры класса интерактивного выбора опций 
+                UserOptionsInteraction interactionChooseAlly = new UserOptionsInteraction(ChooseAlly);
+                UserOptionsInteraction interactionChooseEnemy = new UserOptionsInteraction(ChooseEnemy);
 
+                //Создаем список для выбора персонажа при помощи опций
+                drawer.PositionGreenColorText("Выберите вашего бойца: ", 5 , 3);
+                interactionChooseAlly.SelectOption(10, 5);
+
+                drawer.PositionRedColorText("Начать сражение с противником:", 65, 3);
+                interactionChooseEnemy.SelectOption(60, 5);
+
+                //Цикл боя до момента смерти союзника/противника
                 while (true)
                 {
-                    PlayerTeam[interactionChooseAlly.OptionCounter].HitEnemy(EnemyTeam[interactionChooseEnemy.OptionCounter]);
+                    Console.Clear();
+
+                    logger.PrintBattleLog(30, 10);
+
+                    UserOptionsInteraction interactionChooseAction = new UserOptionsInteraction(ChooseAction);
+
+                    drawer.PrintCharBrief(PlayerTeam, 6, 3, interactionChooseAlly.OptionCounter, 1);
+                    drawer.PrintCharBrief(EnemyTeam, 75, 3, interactionChooseEnemy.OptionCounter, 2);
+
+                    if (PlayerTeam[interactionChooseAlly.OptionCounter].IsDead())
+                    {
+                        PlayerTeam.Remove(PlayerTeam[interactionChooseAlly.OptionCounter]);
+                        break;
+                    }
+
+                    interactionChooseAction.SelectOption(45, 3);
+
+                    switch (interactionChooseAction.OptionCounter)
+                    {
+                        case 0:
+                            PlayerTeam[interactionChooseAlly.OptionCounter].HitEnemy(EnemyTeam[interactionChooseEnemy.OptionCounter]);
+                            logger.AddNewLog(PlayerTeam[interactionChooseAlly.OptionCounter].HitEnemyLog(EnemyTeam[interactionChooseEnemy.OptionCounter]));
+                            break;
+                        case 1:
+                            PlayerTeam[interactionChooseAlly.OptionCounter].AbilityHitEnemy(EnemyTeam[interactionChooseEnemy.OptionCounter]);
+                            logger.AddNewLog(PlayerTeam[interactionChooseAlly.OptionCounter].AbilityHitEnemyLog(EnemyTeam[interactionChooseEnemy.OptionCounter]));
+                            break;
+                        case 2:
+                            drawer.PrintPressAnyKeyLikeText("Вам удалось сбежать!");
+                            return;
+                    }
+
                     Thread.Sleep(25);
-                    EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemy(PlayerTeam[interactionChooseAlly.OptionCounter]);
+
                     if (EnemyTeam[interactionChooseEnemy.OptionCounter].IsDead())
                     {
-                        Console.WriteLine($"{PlayerTeam[interactionChooseAlly.OptionCounter].CharInfo()} победил!");
+                        drawer.PositionGreenColorText($"{PlayerTeam[interactionChooseAlly.OptionCounter].CharInfo()} победил!", 33, 25);
+                        drawer.PrintPressAnyKeyLikeText($"{EnemyTeam[interactionChooseEnemy.OptionCounter].CharInfo()} повержен!");
                         EnemyTeam.Remove(EnemyTeam[interactionChooseEnemy.OptionCounter]);
                         break;
                     }
+
+                    EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemy(PlayerTeam[interactionChooseAlly.OptionCounter]);
+                    logger.AddNewLog(EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemyLog(PlayerTeam[interactionChooseAlly.OptionCounter]));
+                }
+                logger.ClearLogger();
+            }
+            PostBattleMenu();
+        }
+
+        //Вывод окна с информацией после сражения
+        private void PostBattleMenu()
+        {
+            Console.Clear();
+
+            List<string> postBattleMenu = new List<string> 
+            {
+                "Отдохнуть и починить снаряжение",
+                "Улучшить снаряжение",
+                "Продолжить путешествие"
+            };
+            UserOptionsInteraction interaction = new UserOptionsInteraction(postBattleMenu);
+
+            newExp = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 50) / 2 + 200;
+            newGold = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 25);
+
+            for (int i = 0; i < PlayerTeam.Count; i++)
+            {
+                PlayerTeam[i].GetExp(newExp);
+                PlayerTeam[i].GetMoney(newGold);
+
+                generalGold += PlayerTeam[i].CharMoney;
+            }
+
+            drawer.PositionYelowColorText("Вы победили всех врагов!", 40, 5);
+
+            drawer.PositionText($"Команда получила {newGold} золота", 5, 12);
+            drawer.PositionText($"Персонажи заработали в бою {newExp} опыта", 5, 14);
+            drawer.PositionText($"Текущий уровень персонажей составляет {PlayerTeam[0].CharLevel}", 5, 16);
+            drawer.PositionText($"Текущее командное золото составляет {generalGold}", 5, 18);
+
+            bool isSelected = false;
+            while (!isSelected)
+            {
+                interaction.SelectOption(38, 25);
+                switch (interaction.OptionCounter)
+                {
+                    case 0:
+                        RecalculateTeam();
+                        break;
+                    case 1:
+                        EnhanceGear();
+                        break;
+                    case 2:
+                        //Продолжить путешествие
+                        isSelected = true;
+                        break;
                 }
             }
-            drawer.PositionText("Вы победили всех врагов!", 40, 30);
+        }
+        private void RecalculateTeam()
+        {
+            for(int i = 0; i < PlayerTeam.Count; i++)
+            {
+                PlayerTeam[i].RecalculateStats();
+            }
+        }
+        private void EnhanceGear()
+        {
+            Console.Clear();
+
+            List<string> gearList = new List<string> { };
+
+            RebuildTeam(ChooseAlly, PlayerTeam);
+            RebuildGear(gearList, WeaponList, ArmorList);
+
+            UserOptionsInteraction interactionChooseChar = new UserOptionsInteraction(ChooseAlly);
+            UserOptionsInteraction interactionChooseGear = new UserOptionsInteraction(gearList);
+
+            drawer.PositionText("Выберите персонажа, оружие или броню которого хотите улучшить", 35, 5);
+            interactionChooseChar.SelectOption(45, 17);
+
+            Console.Clear();
+            drawer.PositionText("Выберите оружие или броню для улучшения", 35, 5);
+            interactionChooseGear.SelectOption(45, 17);
+        }
+
+        //Пересборка строкового списка имен/строковой информации из списка с объектами класса персонажа  
+        private void RebuildTeam(List<string> strNamesList, List<BlankCharacter> blankCharList)
+        {
+            while (strNamesList.Count != 0)
+            {
+                strNamesList.Remove(strNamesList[0]);
+            }
+            for (int i = 0; strNamesList.Count < blankCharList.Count; i++)
+            {
+                strNamesList.Add(blankCharList[i].CharInfo());
+            }
+        }
+        private void RebuildGear(List<string> strGearList, List<BlankWeapon> weapon, List<BlankArmor> armor)
+        {
+            while (strGearList.Count != 0)
+            {
+                strGearList.Remove(strGearList[0]);
+            }
+            for (int i = 0; strGearList.Count < weapon.Count; i++)
+            {
+                strGearList.Add(weapon[i].WeaponName);
+            }
+            for (int i = 0; i < armor.Count; i++)
+            {
+                strGearList.Add(armor[i].ArmorName);
+            }
         }
     }
 }
