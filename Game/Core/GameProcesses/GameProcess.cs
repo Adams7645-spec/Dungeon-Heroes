@@ -9,19 +9,29 @@ namespace Dungeon_Heroes
 {
     internal class GameProcess
     {
+        static string[,] currentLevel = new string[,] { };
+
         Random random = new Random();
         DifficultyLevel difficulty = new DifficultyLevel();
         MainMenuInterface menu = new MainMenuInterface();
         DrawingInterface drawer = new DrawingInterface();
+        static World mainWorld;
+        static Player mainPlayer;
 
+        //Общее золото команды
         int generalGold;
+        static string[,] grid;
+
         int newGold;
         int newExp;
+
+        int endGameCode = 0;
 
         List<BlankCharacter> PlayerTeam = new List<BlankCharacter> { };
         List<BlankWeapon> WeaponList = new List<BlankWeapon> { };
         List<BlankArmor> ArmorList = new List<BlankArmor> { };
         List<string> ChooseAlly = new List<string> { };
+
         public void Game()
         {
             Console.Clear();
@@ -30,14 +40,75 @@ namespace Dungeon_Heroes
             ShowBeginningScreen();
 
             //Реализовать основной метод Adventure, где мы можем бродить по карте, искать сокровища или врагов
+            StartAdventure();
 
             FightWithEnemyEvent();
 
             menu.ShowMainMenuScreen();
         }
+
+        //основной метод
+        private void StartAdventure()
+        {
+            grid = LevelParser.ParseLevel("C:/Users/aspin/source/repos/Dungeon Heroes/Game/Dungeon/LevelDungeon/Level1Easy.txt");
+
+            mainWorld = new World(grid);
+            mainPlayer = new Player(8, 4);
+
+            while (true)
+            {
+                Console.Clear();
+                DrawAdventureFrame();
+                HandlePlayerInput();
+            }
+        }
+        private void DrawAdventureFrame()
+        {
+            mainPlayer.Draw();
+            mainWorld.DrawAtPosition(0, 0);
+            mainPlayer.Draw();
+        }
+        private void HandlePlayerInput()
+        {
+            ConsoleKey key;
+            do
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                key = keyInfo.Key;
+            } while (Console.KeyAvailable);
+
+            switch (key)
+            {
+                case ConsoleKey.W:
+                    if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX, mainPlayer.PlayerY - 1))
+                    {
+                        mainPlayer.PlayerY -= 1;
+                    }
+                    break;
+                case ConsoleKey.S:
+                    if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX, mainPlayer.PlayerY + 1))
+                    {
+                        mainPlayer.PlayerY += 1;
+                    }
+                    break;
+                case ConsoleKey.A:
+                    if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX - 1, mainPlayer.PlayerY))
+                    {
+                        mainPlayer.PlayerX -= 1;
+                    }
+                    break;
+                case ConsoleKey.D:
+                    if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX + 1, mainPlayer.PlayerY))
+                    {
+                        mainPlayer.PlayerX += 1;
+                    }
+                    break;
+            }
+        }
+
+        //окно с вводящей в курс дела информацией 
         private void ShowGameLore()
         {
-            //окно с вводящей в курс дела информацией 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;
             string[] gameLore = new string[] 
@@ -59,8 +130,11 @@ namespace Dungeon_Heroes
 
             drawer.PrintPressAnyKeyLikeText("Нажмите, чтобы перейти к созданию персонажей");
         }
+
+        //Создаем команду из доступных персонажей 
         private void CreatePlayerTeam()
         {
+
             Console.Clear();
             List<string> options = new List<string> { "Выбрать Assassin", "Выбрать Gunslinger",
                                                       "Выбрать Paladin", "Выбрать Priest",
@@ -79,11 +153,29 @@ namespace Dungeon_Heroes
                     case 0:
                         BlankCharacter assassin = new Assassin
                             (random.Next(450, 550), random.Next(110, 130), random.Next(60, 70));
+                        BlankWeapon baseWeaponAssassin = new BlankWeapon
+                            (20, 50, $"({assassin.CharName}) rusty knife");
+                        BlankArmor baseArmorAssassin = new BlankArmor
+                            (100, 10, 20, $"({assassin.CharName}) lether armor");
+                        assassin.GetNewWeapon(baseWeaponAssassin);
+                        assassin.GetNewArmor(baseArmorAssassin);
+
+                        WeaponList.Add(baseWeaponAssassin);
+                        ArmorList.Add(baseArmorAssassin);
                         PlayerTeam.Add(assassin);
                         break;
                     case 1:
                         BlankCharacter gunslinger = new Gunslinger
                             (random.Next(650, 750), random.Next(60, 80), random.Next(90, 100));
+                        BlankWeapon baseWeaponGunslinger = new BlankWeapon
+                            (30, 60, $"({gunslinger.CharName}) beginner's pistol");
+                        BlankArmor baseArmorGunslinger = new BlankArmor
+                            (100, 10, 20, $"({gunslinger.CharName}) Lether armor");
+                        gunslinger.GetNewWeapon(baseWeaponGunslinger);
+                        gunslinger.GetNewArmor(baseArmorGunslinger);
+
+                        WeaponList.Add(baseWeaponGunslinger);
+                        ArmorList.Add(baseArmorGunslinger);
                         PlayerTeam.Add(gunslinger);
                         break;
                     case 2:
@@ -107,6 +199,8 @@ namespace Dungeon_Heroes
             }
             drawer.PrintPressAnyKeyLikeText("Персонажи выбраны! Нажмите, чтобы продолжить...");
         }
+
+        //Окно начала приключения
         private void ShowBeginningScreen()
         {
             Console.Clear();
@@ -114,6 +208,8 @@ namespace Dungeon_Heroes
             drawer.PrintWorldInfo(20, 18);
             drawer.PrintPressAnyKeyLikeText("Нажмите, чтобы начать приключение!");
         }
+
+        //Событие сражения с врагом/вражеской командой
         private void FightWithEnemyEvent()
         {
             Logger logger = new Logger();
@@ -203,9 +299,30 @@ namespace Dungeon_Heroes
 
                     EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemy(PlayerTeam[interactionChooseAlly.OptionCounter]);
                     logger.AddNewLog(EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemyLog(PlayerTeam[interactionChooseAlly.OptionCounter]));
+
+                    if (PlayerTeam.Count == 0)
+                        endGameCode = 1;
                 }
                 logger.ClearLogger();
             }
+
+            //Если победил, то получаешь награду и продолжаешь 
+            if (endGameCode == 1)
+            {
+                menu.ShowMainMenuScreen();
+            }
+            else
+            {
+                newExp = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 50) / 2 + 200;
+                newGold = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 25);
+                generalGold += newGold * PlayerTeam.Count;
+                for (int i = 0; i < PlayerTeam.Count; i++)
+                {
+                    PlayerTeam[i].GetExp(newExp);
+                    PlayerTeam[i].GetNewLevel();
+                }
+            }
+
             PostBattleMenu();
         }
 
@@ -221,17 +338,6 @@ namespace Dungeon_Heroes
                 "Продолжить путешествие"
             };
             UserOptionsInteraction interaction = new UserOptionsInteraction(postBattleMenu);
-
-            newExp = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 50) / 2 + 200;
-            newGold = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 25);
-
-            for (int i = 0; i < PlayerTeam.Count; i++)
-            {
-                PlayerTeam[i].GetExp(newExp);
-                PlayerTeam[i].GetMoney(newGold);
-
-                generalGold += PlayerTeam[i].CharMoney;
-            }
 
             drawer.PositionYelowColorText("Вы победили всех врагов!", 40, 5);
 
@@ -259,6 +365,8 @@ namespace Dungeon_Heroes
                 }
             }
         }
+        
+        //Пересчет статов команды
         private void RecalculateTeam()
         {
             for(int i = 0; i < PlayerTeam.Count; i++)
@@ -266,27 +374,56 @@ namespace Dungeon_Heroes
                 PlayerTeam[i].RecalculateStats();
             }
         }
+
+        //Прокачка снаряжения
         private void EnhanceGear()
         {
             Console.Clear();
 
-            List<string> gearList = new List<string> { };
+            List<string> strArmorList = new List<string> { };
+            List<string> strWeaponList = new List<string> { };
+
+            List<string> option = new List<string> { "Прокачка оружия", "Прокачка брони" };
+            List<string> weaponBonusList = new List<string> { "Прокачать базовую силу", "Прокачать бонус силы" };
+            List<string> armorBonusList = new List<string> { "Прокачать базовое здоровье", "Прокачать базовую силу", "Прокачать базовую защиту" };
 
             RebuildTeam(ChooseAlly, PlayerTeam);
-            RebuildGear(gearList, WeaponList, ArmorList);
+            RebuildGear(strArmorList, strWeaponList, WeaponList, ArmorList);
 
-            UserOptionsInteraction interactionChooseChar = new UserOptionsInteraction(ChooseAlly);
-            UserOptionsInteraction interactionChooseGear = new UserOptionsInteraction(gearList);
 
-            drawer.PositionText("Выберите персонажа, оружие или броню которого хотите улучшить", 35, 5);
-            interactionChooseChar.SelectOption(45, 17);
+            //Переписать класс взаимодействия, убрав привязку экземпляра к списку, сделав класс независимым 
+            UserOptionsInteraction interactionChooseOption = new UserOptionsInteraction(option);
+
+            UserOptionsInteraction interactionChooseArmor = new UserOptionsInteraction(strArmorList);
+            UserOptionsInteraction interactionChooseWeapon = new UserOptionsInteraction(strWeaponList);
+
+            UserOptionsInteraction interactionChooseArmorBonus = new UserOptionsInteraction(armorBonusList);
+            UserOptionsInteraction interactionChooseWeaponBonus = new UserOptionsInteraction(weaponBonusList);
 
             Console.Clear();
-            drawer.PositionText("Выберите оружие или броню для улучшения", 35, 5);
-            interactionChooseGear.SelectOption(45, 17);
+            drawer.PositionText("Выберите оружие или броню для улучшения", 35, 2);
+
+            interactionChooseOption.SelectOption(10, 5);
+            switch (interactionChooseOption.OptionCounter)
+            {
+                case 0:
+                    interactionChooseWeapon.SelectOption(40, 5);
+                    interactionChooseWeaponBonus.SelectOption(70, 5);
+                    WeaponList[interactionChooseWeapon.OptionCounter].Upgrade(interactionChooseWeaponBonus.OptionCounter);
+                    generalGold -= 50;
+                    drawer.PositionGreenColorText($"Оружие {strWeaponList[interactionChooseWeapon.OptionCounter]} усилено!", 35, 15);
+                    break;
+                case 1:
+                    interactionChooseArmor.SelectOption(40, 5);
+                    interactionChooseArmorBonus.SelectOption(70, 5);
+                    ArmorList[interactionChooseArmor.OptionCounter].Upgrade(interactionChooseArmorBonus.OptionCounter);
+                    generalGold -= 50;
+                    drawer.PositionGreenColorText($"Броня {strArmorList[interactionChooseArmor.OptionCounter]} усилено!", 35, 15);
+                    break;
+            }
         }
 
-        //Пересборка строкового списка имен/строковой информации из списка с объектами класса персонажа  
+        //Пересборка строкового списка имен/строковой информации из списка с объектами класса персонажа/оружия/брони
         private void RebuildTeam(List<string> strNamesList, List<BlankCharacter> blankCharList)
         {
             while (strNamesList.Count != 0)
@@ -298,19 +435,24 @@ namespace Dungeon_Heroes
                 strNamesList.Add(blankCharList[i].CharInfo());
             }
         }
-        private void RebuildGear(List<string> strGearList, List<BlankWeapon> weapon, List<BlankArmor> armor)
+        private void RebuildGear(List<string> strArmorList, List<string> strWeaponList, List<BlankWeapon> weapon, List<BlankArmor> armor)
         {
-            while (strGearList.Count != 0)
+            while (strArmorList.Count != 0)
             {
-                strGearList.Remove(strGearList[0]);
-            }
-            for (int i = 0; strGearList.Count < weapon.Count; i++)
-            {
-                strGearList.Add(weapon[i].WeaponName);
+                strArmorList.Remove(strArmorList[0]);
             }
             for (int i = 0; i < armor.Count; i++)
             {
-                strGearList.Add(armor[i].ArmorName);
+                strArmorList.Add(armor[i].ArmorName);
+            }
+
+            while (strWeaponList.Count != 0)
+            {
+                strWeaponList.Remove(strWeaponList[0]);
+            }
+            for (int i = 0; strWeaponList.Count < weapon.Count; i++)
+            {
+                strWeaponList.Add(weapon[i].WeaponName);
             }
         }
     }

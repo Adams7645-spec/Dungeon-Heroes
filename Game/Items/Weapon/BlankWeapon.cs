@@ -22,5 +22,17 @@ namespace Dungeon_Heroes
             this.damageBonus = damageBonus;
             this.weaponName = weaponName;
         }
+
+        public virtual void Upgrade(int optionToUpgrade)
+        {
+            if(optionToUpgrade == 0)
+            {
+                weaponBaseDamage += Convert.ToInt32(weaponBaseDamage * 0.2);
+            }
+            else
+            {
+                damageBonus += Convert.ToInt32(damageBonus * 0.2);
+            }
+        }
     }
 }
