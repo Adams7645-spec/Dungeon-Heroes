@@ -9,13 +9,13 @@ namespace Dungeon_Heroes
 {
     internal class CoreProcess
     {
-        static StartScreenInterface startScreenInterface = new StartScreenInterface();
-        static MainMenuInterface menuInterface = new MainMenuInterface();
+        static StartScreenInterface startScreen = new StartScreenInterface();
+        static MainMenuInterface menu = new MainMenuInterface();
         static void Main(string[] args)
         {
-            startScreenInterface.SetGameWindow();
-            startScreenInterface.ShowStartScreen();
-            menuInterface.ShowMainMenuScreen();
+            startScreen.SetGameWindow();
+            startScreen.ShowStartScreen();
+            menu.ShowMainMenuScreen();
 
             Console.ReadKey();
         }

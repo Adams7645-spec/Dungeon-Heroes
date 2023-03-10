@@ -23,30 +23,9 @@ namespace Dungeon_Heroes
             Console.WriteLine($@"{text}");
             Thread.Sleep(10);
         }
-        public void PositionGreenColorText(String text, int marginLeft, int marginTop)
+        public void PositionAnyColorText(String text, int marginLeft, int marginTop, ConsoleColor color)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-
-            Console.SetCursorPosition(marginLeft, marginTop + 1);
-            Console.WriteLine($@"{text}");
-            Thread.Sleep(10);
-
-            Console.ResetColor();
-        }
-        public void PositionRedColorText(String text, int marginLeft, int marginTop)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            Console.SetCursorPosition(marginLeft, marginTop + 1);
-            Console.WriteLine($@"{text}");
-            Thread.Sleep(10);
-
-            Console.ResetColor();
-        }
-        public void PositionYelowColorText(String text, int marginLeft, int marginTop)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-
+            Console.ForegroundColor = color;
             Console.SetCursorPosition(marginLeft, marginTop + 1);
             Console.WriteLine($@"{text}");
             Thread.Sleep(10);
@@ -121,6 +100,15 @@ namespace Dungeon_Heroes
                     PositionText($"Опыт: {TeamList[i].CharExp}", marginLeft + increment, marginTop + 9);
                     PositionText($"Уровень: {TeamList[i].CharLevel}", marginLeft + increment, marginTop + 10);
                 }
+            }
+        }
+        
+        //Вывод короткого списка персонажей
+        public void PrintShortTeamBrief(List<BlankCharacter> TeamList, int marginLeft, int marginTop)
+        {
+            for (int i = 0; i < TeamList.Count; i++)
+            {
+                PositionText($"{TeamList[i].CharInfo()}", marginLeft, marginTop + i);
             }
         }
 

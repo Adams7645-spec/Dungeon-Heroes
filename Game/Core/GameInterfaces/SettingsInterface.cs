@@ -31,15 +31,15 @@ namespace Dungeon_Heroes
             {
                 case 0:
                     difficultyLevel.SetEasyDiff();
-                    drawer.PositionGreenColorText($"Выбрана {difficultyLevel.DifficultyName} сложность!", 40, 20);
+                    drawer.PositionAnyColorText($"Выбрана {difficultyLevel.DifficultyName} сложность!", 40, 20, ConsoleColor.Green);
                     break;
                 case 1:
                     difficultyLevel.SetMidDiff();
-                    drawer.PositionYelowColorText($"Выбрана {difficultyLevel.DifficultyName} сложность!", 40, 20);
+                    drawer.PositionAnyColorText($"Выбрана {difficultyLevel.DifficultyName} сложность!", 40, 20, ConsoleColor.Yellow);
                     break;
                 case 2:
                     difficultyLevel.SetHardDiff();
-                    drawer.PositionRedColorText($"Выбрана {difficultyLevel.DifficultyName} сложность!", 40, 20);
+                    drawer.PositionAnyColorText($"Выбрана {difficultyLevel.DifficultyName} сложность!", 40, 20, ConsoleColor.Red);
                     break;
             }
         }

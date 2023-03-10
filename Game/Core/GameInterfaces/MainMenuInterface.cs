@@ -90,7 +90,7 @@ namespace Dungeon_Heroes
             drawer.PositionText("Enter - выбрать", 85, 2);
 
             //Информация о версии
-            drawer.PositionText("Alpha V0.1", 88, 32);
+            drawer.PositionText("Alpha V0.2", 88, 32);
         }
 
         //Вызываем выбранную опцию

@@ -90,9 +90,8 @@
     <Compile Include="Game\Core\GameInterfaces\StartScreenInterface.cs" />
     <Compile Include="Game\Core\GameInterfaces\MainMenuInterface.cs" />
     <Compile Include="Game\Core\GameProcesses\Logger.cs" />
-    <Compile Include="Game\Core\GameProcesses\LevelParser.cs" />
+    <Compile Include="Game\Core\GameProcesses\Generate\LevelParser.cs" />
     <Compile Include="Game\Core\GameProcesses\WorldAndPlayer\Player.cs" />
-    <Compile Include="Game\Core\GameProcesses\WorldAndPlayer\PointOfInterest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\Character\Classes\Assassin.cs" />
     <Compile Include="Game\Character\Classes\Gunslinger.cs" />
@@ -115,7 +114,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Game\Dungeon\LevelDungeon\Level1Easy.txt" />
+    <Content Include="Game\Dungeon\LevelDungeon\Easy1Level.txt" />
+    <Content Include="Game\Dungeon\LevelDungeon\Hard1Level.txt" />
+    <Content Include="Game\Dungeon\LevelDungeon\Medium1Level.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -18,15 +18,18 @@ namespace Dungeon_Heroes
             Rows = Grid.GetLength(0);
             Cols = Grid.GetLength(1);
         }
-        public void DrawAtPosition(int marginLeft, int marginTop)
+        public void DrawAtPosition(int marginLeft, int marginTop, ConsoleColor color)
         {
             for (int y = 0; y < Rows; y++)
             {
                 for(int x = 0; x < Cols; x++)
                 {
+                    Console.ForegroundColor = color;
                     string element = Grid[y, x];
                     Console.SetCursorPosition(x + marginLeft, y + marginTop);
                     Console.Write(element);
+
+                    Console.ResetColor();
                 }
             }
         }

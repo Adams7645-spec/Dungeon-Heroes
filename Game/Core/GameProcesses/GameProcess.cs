@@ -22,6 +22,11 @@ namespace Dungeon_Heroes
         int generalGold;
         static string[,] grid;
 
+        //Указать корневую папку с локациями
+        static string baseLevelDir = @"C:\Users\aspin\source\repos\Dungeon Heroes\Game\Dungeon\LevelDungeon\";
+        static string levelName;
+        static string levelPath;
+
         int newGold;
         int newExp;
 
@@ -40,7 +45,7 @@ namespace Dungeon_Heroes
             ShowBeginningScreen();
 
             //Реализовать основной метод Adventure, где мы можем бродить по карте, искать сокровища или врагов
-            StartAdventure();
+            StartAdventure(8, 4);
 
             FightWithEnemyEvent();
 
@@ -48,26 +53,114 @@ namespace Dungeon_Heroes
         }
 
         //основной метод
-        private void StartAdventure()
+        private void StartAdventure(int PlayerPosX, int PlayerPosY)
         {
-            grid = LevelParser.ParseLevel("C:/Users/aspin/source/repos/Dungeon Heroes/Game/Dungeon/LevelDungeon/Level1Easy.txt");
+            //Реализовать выбор уровня при завершении путешествия (выхода с предыдущей локации)
+            List<string> selectDungeon = new List<string> 
+            {
+                "Тоскливое логово (легко)",
+                "Подземелья Призрачного Ворона (средне)",
+                "Лабиринт скорби (тяжело)"
+            };
+            UserOptionsInteraction selectDungeonOption = new UserOptionsInteraction(selectDungeon);
+
+            Console.Clear();
+
+            selectDungeonOption.SelectOption(10, 5);
+            switch (selectDungeonOption.OptionCounter)
+            {
+                case 0:
+                    levelName = "Easy1Level.txt";
+                    break;
+                case 1:
+                    levelName = "Medium1Level.txt";
+                    break;
+                case 2:
+                    levelName = "Hard1Level.txt";
+                    break;
+            }
+
+            levelPath = baseLevelDir + levelName;
+            grid = LevelParser.ParseLevel(levelPath);
 
             mainWorld = new World(grid);
-            mainPlayer = new Player(8, 4);
+            mainPlayer = new Player(PlayerPosX, PlayerPosY);
+
+            Console.Clear();
+
+            UpdateAllFrame();
 
             while (true)
             {
-                Console.Clear();
-                DrawAdventureFrame();
+                DrawActiveFrame();
                 HandlePlayerInput();
             }
         }
-        private void DrawAdventureFrame()
+
+        //Полное обновление кадра
+        private void UpdateAllFrame()
         {
-            mainPlayer.Draw();
-            mainWorld.DrawAtPosition(0, 0);
+            string[] teamInfoFrame = new string[]
+            {
+                "┌───────────────────────────────┐",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "└───────────────────────────────┘",
+            };
+            string[] miscInfoFrame = new string[]
+            {
+                "┌───────────────────────────────┐",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "└───────────────────────────────┘",
+            };
+            string[] controlInfoFrame = new string[]
+            {
+                "┌───────────────────────────────┐",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "│                               │",
+                "└───────────────────────────────┘",
+            };
+
+            drawer.PrintASCIIAtPosition(teamInfoFrame, 64, 0);
+            drawer.PrintASCIIAtPosition(miscInfoFrame, 64, 11);
+            drawer.PrintASCIIAtPosition(controlInfoFrame, 64, 19);
+
+            drawer.PositionAnyColorText("Ваша команда:", 67, 1, ConsoleColor.Green);
+            drawer.PrintShortTeamBrief(PlayerTeam, 67, 2);
+
+            drawer.PositionText("Ваше золото: ", 67, 12);
+            drawer.PositionAnyColorText($"{generalGold}", 80, 12, ConsoleColor.Yellow);
+
+            drawer.PositionText("Ваш опыт: ", 67, 13);
+            drawer.PositionAnyColorText($"{PlayerTeam[0].CharExp}", 80, 13, ConsoleColor.Cyan);
+
+            drawer.PositionText("Управление: ", 67, 20);
+            drawer.PositionText("WASD - передвижение", 67, 21);
+            drawer.PositionText("Enter - взаимодействие", 67, 22);
+
+            mainWorld.DrawAtPosition(0, 0, ConsoleColor.DarkYellow);
             mainPlayer.Draw();
         }
+
+        //Отрисовка динамических элементов интерфейса
+        private void DrawActiveFrame()
+        {
+            //отрисовка персонажей и всего того, что требует частого обновления экрана
+            mainPlayer.Draw();
+        }
+
+        //Чтение клавиш пользователя
         private void HandlePlayerInput()
         {
             ConsoleKey key;
@@ -82,28 +175,51 @@ namespace Dungeon_Heroes
                 case ConsoleKey.W:
                     if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX, mainPlayer.PlayerY - 1))
                     {
+                        mainPlayer.PlayerOldX = mainPlayer.PlayerX;
+                        mainPlayer.PlayerOldY = mainPlayer.PlayerY;
+                        mainPlayer.PlayerMarker = "▲";
                         mainPlayer.PlayerY -= 1;
                     }
                     break;
                 case ConsoleKey.S:
                     if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX, mainPlayer.PlayerY + 1))
                     {
+                        mainPlayer.PlayerOldX = mainPlayer.PlayerX;
+                        mainPlayer.PlayerOldY = mainPlayer.PlayerY;
+                        mainPlayer.PlayerMarker = "▼";
                         mainPlayer.PlayerY += 1;
                     }
                     break;
                 case ConsoleKey.A:
                     if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX - 1, mainPlayer.PlayerY))
                     {
+                        mainPlayer.PlayerOldX = mainPlayer.PlayerX;
+                        mainPlayer.PlayerOldY = mainPlayer.PlayerY;
+                        mainPlayer.PlayerMarker = "◄";
                         mainPlayer.PlayerX -= 1;
                     }
                     break;
                 case ConsoleKey.D:
                     if (mainWorld.IsPositionWalkable(mainPlayer.PlayerX + 1, mainPlayer.PlayerY))
                     {
+                        mainPlayer.PlayerOldX = mainPlayer.PlayerX;
+                        mainPlayer.PlayerOldY = mainPlayer.PlayerY;
+                        mainPlayer.PlayerMarker = "►";
                         mainPlayer.PlayerX += 1;
                     }
                     break;
+                case ConsoleKey.Enter:
+                    InteractWithPosition();
+                    break;
             }
+        }
+
+        //Метод взаимодействия с точками интереса
+        private void InteractWithPosition()
+        {
+            //Реализовать метод взаимодействия с точками интереса
+            //Сопоставление координат точки интереса с позицией игрока?
+            //Проверка символов в радиусе одной клетки от игрока? 
         }
 
         //окно с вводящей в курс дела информацией 
@@ -246,10 +362,10 @@ namespace Dungeon_Heroes
                 UserOptionsInteraction interactionChooseEnemy = new UserOptionsInteraction(ChooseEnemy);
 
                 //Создаем список для выбора персонажа при помощи опций
-                drawer.PositionGreenColorText("Выберите вашего бойца: ", 5 , 3);
+                drawer.PositionAnyColorText("Выберите вашего бойца: ", 5 , 3, ConsoleColor.Green);
                 interactionChooseAlly.SelectOption(10, 5);
 
-                drawer.PositionRedColorText("Начать сражение с противником:", 65, 3);
+                drawer.PositionAnyColorText("Начать сражение с противником:", 65, 3, ConsoleColor.Red);
                 interactionChooseEnemy.SelectOption(60, 5);
 
                 //Цикл боя до момента смерти союзника/противника
@@ -291,7 +407,7 @@ namespace Dungeon_Heroes
 
                     if (EnemyTeam[interactionChooseEnemy.OptionCounter].IsDead())
                     {
-                        drawer.PositionGreenColorText($"{PlayerTeam[interactionChooseAlly.OptionCounter].CharInfo()} победил!", 33, 25);
+                        drawer.PositionAnyColorText($"{PlayerTeam[interactionChooseAlly.OptionCounter].CharInfo()} победил!", 33, 25, ConsoleColor.Green);
                         drawer.PrintPressAnyKeyLikeText($"{EnemyTeam[interactionChooseEnemy.OptionCounter].CharInfo()} повержен!");
                         EnemyTeam.Remove(EnemyTeam[interactionChooseEnemy.OptionCounter]);
                         break;
@@ -339,7 +455,7 @@ namespace Dungeon_Heroes
             };
             UserOptionsInteraction interaction = new UserOptionsInteraction(postBattleMenu);
 
-            drawer.PositionYelowColorText("Вы победили всех врагов!", 40, 5);
+            drawer.PositionAnyColorText("Вы победили всех врагов!", 40, 5, ConsoleColor.Yellow);
 
             drawer.PositionText($"Команда получила {newGold} золота", 5, 12);
             drawer.PositionText($"Персонажи заработали в бою {newExp} опыта", 5, 14);
@@ -411,14 +527,14 @@ namespace Dungeon_Heroes
                     interactionChooseWeaponBonus.SelectOption(70, 5);
                     WeaponList[interactionChooseWeapon.OptionCounter].Upgrade(interactionChooseWeaponBonus.OptionCounter);
                     generalGold -= 50;
-                    drawer.PositionGreenColorText($"Оружие {strWeaponList[interactionChooseWeapon.OptionCounter]} усилено!", 35, 15);
+                    drawer.PositionAnyColorText($"Оружие {strWeaponList[interactionChooseWeapon.OptionCounter]} усилено!", 35, 15, ConsoleColor.Green);
                     break;
                 case 1:
                     interactionChooseArmor.SelectOption(40, 5);
                     interactionChooseArmorBonus.SelectOption(70, 5);
                     ArmorList[interactionChooseArmor.OptionCounter].Upgrade(interactionChooseArmorBonus.OptionCounter);
                     generalGold -= 50;
-                    drawer.PositionGreenColorText($"Броня {strArmorList[interactionChooseArmor.OptionCounter]} усилено!", 35, 15);
+                    drawer.PositionAnyColorText($"Броня {strArmorList[interactionChooseArmor.OptionCounter]} усилено!", 35, 15, ConsoleColor.Green);
                     break;
             }
         }

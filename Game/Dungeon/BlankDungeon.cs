@@ -8,5 +8,9 @@ namespace Dungeon_Heroes
 {
     internal class BlankDungeon
     {
+        public BlankDungeon()
+        {
+
+        }
     }
 }
