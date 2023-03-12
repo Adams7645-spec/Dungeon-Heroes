@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\Dungeon\BlankRoom.cs" />
     <Compile Include="Game\Core\GameProcesses\DifficultyLevel.cs" />
     <Compile Include="Game\Core\GameProcesses\GameProcess.cs" />
     <Compile Include="Game\Core\GameInterfaces\Drawing\DrawingInterface.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Game\Core\GameProcesses\Logger.cs" />
     <Compile Include="Game\Core\GameProcesses\Generate\LevelParser.cs" />
     <Compile Include="Game\Core\GameProcesses\WorldAndPlayer\Player.cs" />
+    <Compile Include="Game\Core\GameProcesses\WorldAndPlayer\PointOfInterest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game\Character\Classes\Assassin.cs" />
     <Compile Include="Game\Character\Classes\Gunslinger.cs" />

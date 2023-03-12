@@ -17,6 +17,8 @@ namespace Dungeon_Heroes
         DrawingInterface drawer = new DrawingInterface();
         static World mainWorld;
         static Player mainPlayer;
+        static PointOfInterest testPoint;// реализовать пулл точек интереса на карте 
+        static BlankDungeon currentDungeon;
 
         //Общее золото команды
         int generalGold;
@@ -35,6 +37,7 @@ namespace Dungeon_Heroes
         List<BlankCharacter> PlayerTeam = new List<BlankCharacter> { };
         List<BlankWeapon> WeaponList = new List<BlankWeapon> { };
         List<BlankArmor> ArmorList = new List<BlankArmor> { };
+        List<PointOfInterest> PointList = new List<PointOfInterest> { };
         List<string> ChooseAlly = new List<string> { };
 
         public void Game()
@@ -71,24 +74,30 @@ namespace Dungeon_Heroes
             {
                 case 0:
                     levelName = "Easy1Level.txt";
+                    currentDungeon = new EasyDungeon();
                     break;
                 case 1:
                     levelName = "Medium1Level.txt";
+                    currentDungeon = new MediumDungeon();
                     break;
                 case 2:
                     levelName = "Hard1Level.txt";
+                    currentDungeon = new HardDungeon();
                     break;
             }
 
             levelPath = baseLevelDir + levelName;
             grid = LevelParser.ParseLevel(levelPath);
 
-            mainWorld = new World(grid);
+            mainWorld = new World(grid, currentDungeon);
             mainPlayer = new Player(PlayerPosX, PlayerPosY);
+            testPoint = new PointOfInterest(10, 5);
 
             Console.Clear();
 
             UpdateAllFrame();
+
+            
 
             while (true)
             {
@@ -150,6 +159,7 @@ namespace Dungeon_Heroes
             drawer.PositionText("Enter - взаимодействие", 67, 22);
 
             mainWorld.DrawAtPosition(0, 0, ConsoleColor.DarkYellow);
+            mainWorld.PlacePointOfInterest();
             mainPlayer.Draw();
         }
 
@@ -217,9 +227,32 @@ namespace Dungeon_Heroes
         //Метод взаимодействия с точками интереса
         private void InteractWithPosition()
         {
-            //Реализовать метод взаимодействия с точками интереса
-            //Сопоставление координат точки интереса с позицией игрока?
-            //Проверка символов в радиусе одной клетки от игрока? 
+            //if (mainPlayer.PlayerX == PointList[0].PointPosX && mainPlayer.PlayerY == PointList[0].PointPosY)
+            //    RandomizeEvent();
+            // Если на этой координате есть триггер
+            //PointList.
+        }
+
+        //Вызов случайного ивента
+        private void RandomizeEvent()
+        {
+            int Event = random.Next(0, 3);
+
+            switch (Event)
+            {
+                case 0:
+                    FightWithEnemyEvent();
+                    break;
+                case 1:
+                    FoundTreasureEvent();
+                    break;
+                case 2:
+                    FoundNothingEvent();
+                    break;
+                case 3:
+                    PlayerTrapedEvent();
+                    break;
+            }
         }
 
         //окно с вводящей в курс дела информацией 
@@ -399,8 +432,18 @@ namespace Dungeon_Heroes
                             logger.AddNewLog(PlayerTeam[interactionChooseAlly.OptionCounter].AbilityHitEnemyLog(EnemyTeam[interactionChooseEnemy.OptionCounter]));
                             break;
                         case 2:
-                            drawer.PrintPressAnyKeyLikeText("Вам удалось сбежать!");
-                            return;
+                            if (random.Next(0, 100) > 80)
+                            {
+                                drawer.PrintPressAnyKeyLikeText("Вам удалось сбежать!");
+                                Console.Clear();
+                                UpdateAllFrame();
+                                return;
+                            }
+                            else
+                            {
+                                drawer.PrintPressAnyKeyLikeText("Побег провалился!");
+                            }
+                            break;
                     }
 
                     Thread.Sleep(25);
@@ -442,6 +485,32 @@ namespace Dungeon_Heroes
             PostBattleMenu();
         }
 
+        //Событие появления сокровища
+        private void FoundTreasureEvent()
+        {
+            //Вывести окно с информацией об ивенте - Вы нашли сокровище! Добавлено золота:
+            newGold = random.Next(50, 250);
+            generalGold += newGold;
+            UpdateAllFrame();
+        }
+
+        //Событие попадания в ловушку
+        private void PlayerTrapedEvent() 
+        {
+            //Вывести окно с информацией об ивенте - Вы попали в ловушку! Здоровье персонажей уменьшено на 25%
+            for (int i = 0; i < PlayerTeam.Count; i++)
+            {
+                PlayerTeam[i].TakeDamage(Convert.ToInt32(PlayerTeam[i].TotalHealth * 0.25));
+            }
+            UpdateAllFrame();
+        }
+
+        //Пустое событие
+        private void FoundNothingEvent()
+        {
+            //Вывести окно с информацией об ивенте - Вы ничего здесь не нашли!
+        }
+
         //Вывод окна с информацией после сражения
         private void PostBattleMenu()
         {
@@ -477,6 +546,8 @@ namespace Dungeon_Heroes
                     case 2:
                         //Продолжить путешествие
                         isSelected = true;
+                        Console.Clear();
+                        UpdateAllFrame();
                         break;
                 }
             }
@@ -506,8 +577,6 @@ namespace Dungeon_Heroes
             RebuildTeam(ChooseAlly, PlayerTeam);
             RebuildGear(strArmorList, strWeaponList, WeaponList, ArmorList);
 
-
-            //Переписать класс взаимодействия, убрав привязку экземпляра к списку, сделав класс независимым 
             UserOptionsInteraction interactionChooseOption = new UserOptionsInteraction(option);
 
             UserOptionsInteraction interactionChooseArmor = new UserOptionsInteraction(strArmorList);
