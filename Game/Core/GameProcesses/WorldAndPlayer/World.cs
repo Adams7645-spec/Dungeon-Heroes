@@ -9,7 +9,7 @@ namespace Dungeon_Heroes
         private int Rows;
         private int Cols;
         private BlankDungeon currentDungeon;
-        List<PointOfInterest> pointList = new List<PointOfInterest>();
+        public List<PointOfInterest> pointList = new List<PointOfInterest>();
         Random random = new Random();
         public World(string[,] grid, BlankDungeon dungeon)
         {
@@ -33,21 +33,24 @@ namespace Dungeon_Heroes
                 }
             }
         }
-        public void PlacePointOfInterest()
+        public void GeneratePointOfInterest()
         {
-            List<List<List<int>>> currentRooms = new List<List<List<int>>> { };
-            currentRooms = currentDungeon.GetRoomGrids();
-            for (int i = 0; i < 50; i++)
-            { //currentDungeon.GetAmountOfPoints()
-                List<List<int>> randRoom = new List<List<int>> { };
-                randRoom = currentRooms[random.Next(currentRooms.Count)];
-                int maxLenghtX = randRoom[0].Count;
-                int maxLenghtY = randRoom.Count;
+            List<BlankRoom> currentRooms = new List<BlankRoom> { };
+            currentRooms = currentDungeon.rooms;
 
-                PointOfInterest point = new PointOfInterest(random.Next(randRoom[0][0], maxLenghtX) + currentDungeon.GetRoomPosX(), 
-                                                            random.Next(randRoom[0][0], maxLenghtY) + currentDungeon.GetRoomPosY());
+            for (int i = 0; i < currentDungeon.rooms.Count; i++)
+            {
+                PointOfInterest point = new PointOfInterest(random.Next(currentRooms[i].PosX, currentRooms[i].LenghtX + currentRooms[i].PosX), 
+                                                            random.Next(currentRooms[i].PosY, currentRooms[i].LenghtY + currentRooms[i].PosY));
                 pointList.Add(point);
                 point.Draw();
+            }
+        }
+        public void PrintPointOfInterest()
+        {
+            for(int i = 0; i < pointList.Count; i++)
+            {
+                pointList[i].Draw();
             }
         }
         public bool IsPositionWalkable(int posX, int posY)

@@ -8,5 +8,8 @@ namespace Dungeon_Heroes
 {
     internal class MediumDungeon : BlankDungeon
     {
+        public MediumDungeon() : base(10,10)
+        {
+        }
     }
 }

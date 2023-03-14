@@ -17,7 +17,6 @@ namespace Dungeon_Heroes
         DrawingInterface drawer = new DrawingInterface();
         static World mainWorld;
         static Player mainPlayer;
-        static PointOfInterest testPoint;// реализовать пулл точек интереса на карте 
         static BlankDungeon currentDungeon;
 
         //Общее золото команды
@@ -37,7 +36,6 @@ namespace Dungeon_Heroes
         List<BlankCharacter> PlayerTeam = new List<BlankCharacter> { };
         List<BlankWeapon> WeaponList = new List<BlankWeapon> { };
         List<BlankArmor> ArmorList = new List<BlankArmor> { };
-        List<PointOfInterest> PointList = new List<PointOfInterest> { };
         List<string> ChooseAlly = new List<string> { };
 
         public void Game()
@@ -48,7 +46,7 @@ namespace Dungeon_Heroes
             ShowBeginningScreen();
 
             //Реализовать основной метод Adventure, где мы можем бродить по карте, искать сокровища или врагов
-            StartAdventure(8, 4);
+            StartAdventure();
 
             FightWithEnemyEvent();
 
@@ -56,7 +54,7 @@ namespace Dungeon_Heroes
         }
 
         //основной метод
-        private void StartAdventure(int PlayerPosX, int PlayerPosY)
+        private void StartAdventure()
         {
             //Реализовать выбор уровня при завершении путешествия (выхода с предыдущей локации)
             List<string> selectDungeon = new List<string> 
@@ -69,20 +67,21 @@ namespace Dungeon_Heroes
 
             Console.Clear();
 
-            selectDungeonOption.SelectOption(10, 5);
+            drawer.PositionAnyColorText("Выберите подземелье:", 35, 5, ConsoleColor.Yellow);
+            selectDungeonOption.SelectOption(30, 10);
             switch (selectDungeonOption.OptionCounter)
             {
                 case 0:
-                    levelName = "Easy1Level.txt";
                     currentDungeon = new EasyDungeon();
+                    levelName = currentDungeon.LevelName;
                     break;
                 case 1:
-                    levelName = "Medium1Level.txt";
                     currentDungeon = new MediumDungeon();
+                    levelName = currentDungeon.LevelName;
                     break;
                 case 2:
-                    levelName = "Hard1Level.txt";
                     currentDungeon = new HardDungeon();
+                    levelName = currentDungeon.LevelName;
                     break;
             }
 
@@ -90,14 +89,12 @@ namespace Dungeon_Heroes
             grid = LevelParser.ParseLevel(levelPath);
 
             mainWorld = new World(grid, currentDungeon);
-            mainPlayer = new Player(PlayerPosX, PlayerPosY);
-            testPoint = new PointOfInterest(10, 5);
+            mainPlayer = new Player(currentDungeon.PlayerPosX, currentDungeon.PlayerPosY);
+            mainWorld.GeneratePointOfInterest();
 
             Console.Clear();
 
             UpdateAllFrame();
-
-            
 
             while (true)
             {
@@ -159,7 +156,7 @@ namespace Dungeon_Heroes
             drawer.PositionText("Enter - взаимодействие", 67, 22);
 
             mainWorld.DrawAtPosition(0, 0, ConsoleColor.DarkYellow);
-            mainWorld.PlacePointOfInterest();
+            mainWorld.PrintPointOfInterest();
             mainPlayer.Draw();
         }
 
@@ -227,10 +224,17 @@ namespace Dungeon_Heroes
         //Метод взаимодействия с точками интереса
         private void InteractWithPosition()
         {
-            //if (mainPlayer.PlayerX == PointList[0].PointPosX && mainPlayer.PlayerY == PointList[0].PointPosY)
-            //    RandomizeEvent();
-            // Если на этой координате есть триггер
-            //PointList.
+            //реализовать взаимодействие с точкой интереса 
+            //сравнивать координаты с координатами точек из mainWorld.pointList
+
+            for(int i = 0; i < mainWorld.pointList.Count; i++)
+            {
+                if (mainPlayer.PlayerX == mainWorld.pointList[i].PointPosX && mainPlayer.PlayerY == mainWorld.pointList[i].PointPosY)
+                {
+                    RandomizeEvent();
+                    mainWorld.pointList.Remove(mainWorld.pointList[i]);
+                }
+            }
         }
 
         //Вызов случайного ивента

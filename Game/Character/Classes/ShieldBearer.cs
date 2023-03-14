@@ -10,7 +10,7 @@ namespace Dungeon_Heroes
     {
         public ShieldBearer(int health, int strengh, int defense) : base(health, strengh, defense)
         {
-            className = "TestClass";
+            className = "Shielder";
             charName = GenerateName(random.Next(4, 8));
         }
     }

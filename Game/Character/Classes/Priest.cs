@@ -10,6 +10,8 @@ namespace Dungeon_Heroes
     {
         public Priest(int health, int strengh, int defense) : base(health, strengh, defense)
         {
+            className = "Priest";
+            charName = GenerateName(random.Next(4, 8));
         }
     }
 }

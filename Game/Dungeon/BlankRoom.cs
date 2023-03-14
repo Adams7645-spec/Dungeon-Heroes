@@ -10,10 +10,19 @@ namespace Dungeon_Heroes
     {
         public int PosX { get; }
         public int PosY { get; }
-        public BlankRoom(int roomPosX, int roomPosY)
+        public int LenghtX { get; }
+        public int LenghtY { get; }
+        public List<List<int>> Grid = new List<List<int>> { };
+        public BlankRoom(int roomPosX, int roomPosY, int roomLenghtX, int roomLenghtY)
         {
             this.PosX = roomPosX;
             this.PosY = roomPosY;
+            this.LenghtX = roomLenghtX;
+            this.LenghtY = roomLenghtY;
+        }
+        public void AddGrid(List<List<int>> roomGrid)
+        {
+            Grid = roomGrid;
         }
     }
 }

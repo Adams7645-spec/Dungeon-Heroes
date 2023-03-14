@@ -13,7 +13,6 @@ namespace Dungeon_Heroes
             className = "Assassin";
             charName = GenerateName(random.Next(4, 8));
         }
-
         public override void HitEnemy(BlankCharacter enemy)
         {
             base.HitEnemy(enemy);

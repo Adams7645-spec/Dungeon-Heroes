@@ -8,17 +8,21 @@ namespace Dungeon_Heroes
 {
     internal class BlankDungeon
     {
-        protected string LevelName { get; set; }
+        public int PlayerPosX { get; }
+        public int PlayerPosY { get; }
+        public string LevelName { get; set; }
         protected int PointOfInterestCount { get; set; }
-        protected List<List<List<int>>> rooms = new List<List<List<int>>> { };
-        public BlankDungeon()
+        public readonly List<BlankRoom> rooms = new List<BlankRoom> { };
+        public BlankDungeon(int playerXpos, int playerYpos)
         {
             LevelName = "Path";
+            PlayerPosX = playerXpos;
+            PlayerPosY = playerYpos;
             PointOfInterestCount = 0;
         }
         protected void SetRoomGrid(int startX, int lenghtX, int startY, int lenghtY)
         {
-            List<List<int>> room = new List<List<int>>();
+            List<List<int>> roomGrid = new List<List<int>>();
             List<int> row = new List<int>();
 
             for (int Y = startY; Y < startY + lenghtY; Y++)
@@ -28,18 +32,13 @@ namespace Dungeon_Heroes
                 {
                     row.Add(0);
                 }
-                room.Add(row);
+                roomGrid.Add(row);
             }
-            rooms.Add(room);
+            BlankRoom newRoom = new BlankRoom(startX, startY, lenghtX, lenghtY);
+            newRoom.AddGrid(roomGrid);
+            rooms.Add(newRoom);
         }
-        public virtual int GetRoomPosX()
-        {
-            return 0;
-        }
-        public virtual int GetRoomPosY()
-        {
-            return 0;
-        }
+
         protected void SetRoom(List<int> room)
         {
             SetRoomGrid(room[0], room[1], room[2], room[3]);
@@ -47,14 +46,6 @@ namespace Dungeon_Heroes
         public int GetAmountOfPoints()
         {
             return PointOfInterestCount;
-        }
-        public List<List<List<int>>> GetRoomGrids()
-        {
-            return rooms;
-        }
-        public virtual void Debug()
-        {
-
         }
     }
 }
