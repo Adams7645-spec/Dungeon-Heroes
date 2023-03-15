@@ -17,7 +17,7 @@ namespace Dungeon_Heroes
         public int HealthBonus { get => healthBonus; }
         public int StrenghBonus { get => strenghBonus; }
         public int DefenseBonus { get => defenseBonus; }
-        public string ArmorName { get => armorName; }
+        public string ArmorName { get => armorName; set => armorName = value; }
 
         public BlankArmor(int healthBonus, int strenghBonus, int defenseBonus, string armorName)
         {
@@ -26,7 +26,6 @@ namespace Dungeon_Heroes
             this.defenseBonus = defenseBonus;
             this.armorName = armorName;
         }
-
         public virtual void Upgrade(int optionToUpgrade)
         {
             switch (optionToUpgrade)

@@ -23,6 +23,8 @@ namespace Dungeon_Heroes
             Console.WriteLine($@"{text}");
             Thread.Sleep(10);
         }
+
+        //Вывод текста на на определенные координаты в консоли с указанием цвета 
         public void PositionAnyColorText(String text, int marginLeft, int marginTop, ConsoleColor color)
         {
             Console.ForegroundColor = color;

@@ -89,6 +89,8 @@ namespace Dungeon_Heroes
         }
         public virtual void AbilityHitEnemy(BlankCharacter enemy)
         {
+            logger.AddNewLog(AbilityHitEnemyLog(enemy));
+            enemy.TakeDamage(totalStrengh);
         }
         public virtual void TakeDamage(int damage)
         {

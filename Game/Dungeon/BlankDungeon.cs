@@ -10,14 +10,18 @@ namespace Dungeon_Heroes
     {
         public int PlayerPosX { get; }
         public int PlayerPosY { get; }
+        public int ExitPosX { get; }
+        public int ExitPosY { get; }
         public string LevelName { get; set; }
         protected int PointOfInterestCount { get; set; }
         public readonly List<BlankRoom> rooms = new List<BlankRoom> { };
-        public BlankDungeon(int playerXpos, int playerYpos)
+        public BlankDungeon(int playerXpos, int playerYpos, int exitPosX, int exitPosY)
         {
             LevelName = "Path";
             PlayerPosX = playerXpos;
             PlayerPosY = playerYpos;
+            ExitPosX = exitPosX;
+            ExitPosY = exitPosY;
             PointOfInterestCount = 0;
         }
         protected void SetRoomGrid(int startX, int lenghtX, int startY, int lenghtY)

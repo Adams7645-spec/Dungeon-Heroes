@@ -23,6 +23,7 @@ namespace Dungeon_Heroes
             {
                 if (random.Next(10) >= 8)
                 {
+                    logger.AddNewLog(AbilityHitEnemyLog(enemy));
                     enemy.TakeDamage(totalStrengh + totalStrengh * random.Next(50, 100) / 100);
                 }
                 else
@@ -34,6 +35,7 @@ namespace Dungeon_Heroes
             {
                 if (random.Next(10) >= 5)
                 {
+                    logger.AddNewLog(AbilityHitEnemyLog(enemy));
                     enemy.TakeDamage(totalStrengh + totalStrengh * random.Next(30, 60) / 100);
                 }
                 else

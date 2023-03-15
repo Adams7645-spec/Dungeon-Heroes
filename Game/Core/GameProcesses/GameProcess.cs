@@ -44,12 +44,7 @@ namespace Dungeon_Heroes
             ShowGameLore();
             CreatePlayerTeam();
             ShowBeginningScreen();
-
-            //Реализовать основной метод Adventure, где мы можем бродить по карте, искать сокровища или врагов
             StartAdventure();
-
-            FightWithEnemyEvent();
-
             menu.ShowMainMenuScreen();
         }
 
@@ -148,8 +143,8 @@ namespace Dungeon_Heroes
             drawer.PositionText("Ваше золото: ", 67, 12);
             drawer.PositionAnyColorText($"{generalGold}", 80, 12, ConsoleColor.Yellow);
 
-            drawer.PositionText("Ваш опыт: ", 67, 13);
-            drawer.PositionAnyColorText($"{PlayerTeam[0].CharExp}", 80, 13, ConsoleColor.Cyan);
+            drawer.PositionText("Ваш уровень: ", 67, 13);
+            drawer.PositionAnyColorText($"{PlayerTeam[0].CharLevel}", 80, 13, ConsoleColor.Blue);
 
             drawer.PositionText("Управление: ", 67, 20);
             drawer.PositionText("WASD - передвижение", 67, 21);
@@ -226,8 +221,11 @@ namespace Dungeon_Heroes
         {
             //реализовать взаимодействие с точкой интереса 
             //сравнивать координаты с координатами точек из mainWorld.pointList
-
-            for(int i = 0; i < mainWorld.pointList.Count; i++)
+            if (mainPlayer.PlayerX == currentDungeon.ExitPosX && mainPlayer.PlayerY == currentDungeon.ExitPosY)
+            {
+                StartAdventure();
+            }
+            for (int i = 0; i < mainWorld.pointList.Count; i++)
             {
                 if (mainPlayer.PlayerX == mainWorld.pointList[i].PointPosX && mainPlayer.PlayerY == mainWorld.pointList[i].PointPosY)
                 {
@@ -296,8 +294,8 @@ namespace Dungeon_Heroes
 
             for (int i = 0; PlayerTeam.Count < 4; i++)
             {
-                drawer.PositionText($"Персонаж №{i + 1}", (Console.WindowWidth - 11) / 2, 3);
-                drawer.PositionText($"Выберите желаемого персонажа:", (Console.WindowWidth - 29) / 2, 4);
+                drawer.PositionAnyColorText($"Персонаж №{i + 1}", (Console.WindowWidth - 11) / 2, 3, ConsoleColor.Cyan);
+                drawer.PositionAnyColorText($"Выберите желаемого персонажа:", (Console.WindowWidth - 29) / 2, 4, ConsoleColor.Cyan);
 
                 interaction.SelectOption(41, 12);
 
@@ -306,44 +304,31 @@ namespace Dungeon_Heroes
                     case 0:
                         BlankCharacter assassin = new Assassin
                             (random.Next(450, 550), random.Next(110, 130), random.Next(60, 70));
-                        BlankWeapon baseWeaponAssassin = new BlankWeapon
-                            (20, 50, $"({assassin.CharName}) rusty knife");
-                        BlankArmor baseArmorAssassin = new BlankArmor
-                            (100, 10, 20, $"({assassin.CharName}) lether armor");
-                        assassin.GetNewWeapon(baseWeaponAssassin);
-                        assassin.GetNewArmor(baseArmorAssassin);
-
-                        WeaponList.Add(baseWeaponAssassin);
-                        ArmorList.Add(baseArmorAssassin);
+                        CreatePlayerGear(assassin);
                         PlayerTeam.Add(assassin);
                         break;
                     case 1:
                         BlankCharacter gunslinger = new Gunslinger
-                            (random.Next(650, 750), random.Next(60, 80), random.Next(90, 100));
-                        BlankWeapon baseWeaponGunslinger = new BlankWeapon
-                            (30, 60, $"({gunslinger.CharName}) beginner's pistol");
-                        BlankArmor baseArmorGunslinger = new BlankArmor
-                            (100, 10, 20, $"({gunslinger.CharName}) Lether armor");
-                        gunslinger.GetNewWeapon(baseWeaponGunslinger);
-                        gunslinger.GetNewArmor(baseArmorGunslinger);
-
-                        WeaponList.Add(baseWeaponGunslinger);
-                        ArmorList.Add(baseArmorGunslinger);
+                            (random.Next(550, 650), random.Next(80, 90), random.Next(90, 100));
+                        CreatePlayerGear(gunslinger);
                         PlayerTeam.Add(gunslinger);
                         break;
                     case 2:
                         BlankCharacter Paladin = new Paladin
                             (random.Next(800, 900), random.Next(75, 100), random.Next(120, 140));
+                        CreatePlayerGear(Paladin);
                         PlayerTeam.Add(Paladin);
                         break;
                     case 3:
                         BlankCharacter Priest = new Priest
                             (random.Next(500, 600), random.Next(50, 65), random.Next(40, 50));
+                        CreatePlayerGear(Priest);
                         PlayerTeam.Add(Priest);
                         break;
                     case 4:
                         BlankCharacter ShieldBearer = new ShieldBearer
                             (random.Next(1000, 1100), random.Next(40, 50), random.Next(130, 150));
+                        CreatePlayerGear(ShieldBearer);
                         PlayerTeam.Add(ShieldBearer);
                         break;
                 }
@@ -351,6 +336,19 @@ namespace Dungeon_Heroes
                 drawer.PositionText($"{i + 1}){PlayerTeam[i].CharInfo()}", 5, 10 + i);
             }
             drawer.PrintPressAnyKeyLikeText("Персонажи выбраны! Нажмите, чтобы продолжить...");
+        }
+
+        //Добавляем персонажу стартовый набор вещей
+        private void CreatePlayerGear(BlankCharacter character)
+        {
+            BlankWeapon baseWeapon = new RustyKnife(character.CharName);
+            BlankArmor baseArmor = new LetherArmor(character.CharName);
+
+            character.GetNewWeapon(baseWeapon);
+            character.GetNewArmor(baseArmor);
+
+            WeaponList.Add(baseWeapon);
+            ArmorList.Add(baseArmor);
         }
 
         //Окно начала приключения
@@ -376,10 +374,10 @@ namespace Dungeon_Heroes
             while (EnemyTeam.Count < difficulty.MaxEnemyAtRoom)
             {
                 //Добавить больше противников и сделать рандомную генерацию
-                BlankCharacter enemy = new SampleNPC1(
-                    Convert.ToInt32(random.Next(300, 400) * difficulty.AdictionalNPCHealth), 
-                    Convert.ToInt32(random.Next(30, 45) * difficulty.AdictionalNPCStrenght), 
-                    Convert.ToInt32(random.Next(50, 60) * difficulty.AdictionalNPCDefense));
+                BlankCharacter enemy = new Goblin(
+                    Convert.ToInt32(random.Next(450, 550) * difficulty.AdictionalNPCHealth), 
+                    Convert.ToInt32(random.Next(50, 70) * difficulty.AdictionalNPCStrenght), 
+                    Convert.ToInt32(random.Next(100, 110) * difficulty.AdictionalNPCDefense));
                 EnemyTeam.Add(enemy);
             }
 
@@ -469,7 +467,6 @@ namespace Dungeon_Heroes
                 logger.ClearLogger();
             }
 
-            //Если победил, то получаешь награду и продолжаешь 
             if (endGameCode == 1)
             {
                 menu.ShowMainMenuScreen();

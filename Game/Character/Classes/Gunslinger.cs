@@ -15,12 +15,16 @@ namespace Dungeon_Heroes
         }
         public override void HitEnemy(BlankCharacter enemy)
         {
-            Random rnd = new Random();
-            if (rnd.Next(2) > 1)
+            base.HitEnemy(enemy);
+        }
+        public override void AbilityHitEnemy(BlankCharacter enemy)
+        {
+            if (random.Next(2) > 1)
             {
-                if (rnd.Next(10) >= 10)
+                if (random.Next(10) >= 10)
                 {
-                    enemy.TakeDamage(totalStrengh + totalStrengh * rnd.Next(50, 100) / 100);
+                    logger.AddNewLog(AbilityHitEnemyLog(enemy));
+                    enemy.TakeDamage(totalStrengh + totalStrengh * random.Next(50, 100) / 100);
                 }
                 else
                 {
@@ -29,16 +33,16 @@ namespace Dungeon_Heroes
             }
             else
             {
-                if (rnd.Next(10) >= 10)
+                if (random.Next(10) >= 10)
                 {
-                    enemy.TakeDamage(totalStrengh + totalStrengh * rnd.Next(30, 60) / 100);
+                    logger.AddNewLog(AbilityHitEnemyLog(enemy));
+                    enemy.TakeDamage(totalStrengh + totalStrengh * random.Next(30, 60) / 100);
                 }
                 else
                 {
                     base.HitEnemy(enemy);
                 }
             }
-
         }
     }
 }
