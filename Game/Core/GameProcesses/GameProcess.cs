@@ -9,8 +9,6 @@ namespace Dungeon_Heroes
 {
     internal class GameProcess
     {
-        static string[,] currentLevel = new string[,] { };
-
         Random random = new Random();
         DifficultyLevel difficulty = new DifficultyLevel();
         MainMenuInterface menu = new MainMenuInterface();
@@ -24,28 +22,23 @@ namespace Dungeon_Heroes
         static string[,] grid;
 
         //Указать корневую папку с локациями
-        static string baseLevelDir = @"C:\Users\aspin\source\repos\Dungeon Heroes\Game\Dungeon\LevelDungeon\";
+        static string baseLevelDir = @"C:\Users\a3spin\source\repos\Dungeon Heroes\Game\Dungeon\LevelDungeon\";
         static string levelName;
         static string levelPath;
 
         int newGold;
         int newExp;
 
-        int endGameCode = 0;
-
         List<BlankCharacter> PlayerTeam = new List<BlankCharacter> { };
         List<BlankWeapon> WeaponList = new List<BlankWeapon> { };
         List<BlankArmor> ArmorList = new List<BlankArmor> { };
         List<string> ChooseAlly = new List<string> { };
-
         public void Game()
         {
-            Console.Clear();
             ShowGameLore();
             CreatePlayerTeam();
             ShowBeginningScreen();
             StartAdventure();
-            menu.ShowMainMenuScreen();
         }
 
         //основной метод
@@ -101,6 +94,8 @@ namespace Dungeon_Heroes
         //Полное обновление кадра
         private void UpdateAllFrame()
         {
+            Console.Clear();
+
             string[] teamInfoFrame = new string[]
             {
                 "┌───────────────────────────────┐",
@@ -225,6 +220,10 @@ namespace Dungeon_Heroes
             {
                 StartAdventure();
             }
+            if(mainPlayer.PlayerX == currentDungeon.BossPosX && mainPlayer.PlayerY == currentDungeon.BossPosY && currentDungeon.BossIsActive)
+            {
+                FightWithBossEvent();
+            }
             for (int i = 0; i < mainWorld.pointList.Count; i++)
             {
                 if (mainPlayer.PlayerX == mainWorld.pointList[i].PointPosX && mainPlayer.PlayerY == mainWorld.pointList[i].PointPosY)
@@ -238,7 +237,7 @@ namespace Dungeon_Heroes
         //Вызов случайного ивента
         private void RandomizeEvent()
         {
-            int Event = random.Next(0, 3);
+            int Event = random.Next(4);
 
             switch (Event)
             {
@@ -373,20 +372,52 @@ namespace Dungeon_Heroes
 
             while (EnemyTeam.Count < difficulty.MaxEnemyAtRoom)
             {
-                //Добавить больше противников и сделать рандомную генерацию
-                BlankCharacter enemy = new Goblin(
-                    Convert.ToInt32(random.Next(450, 550) * difficulty.AdictionalNPCHealth), 
-                    Convert.ToInt32(random.Next(50, 70) * difficulty.AdictionalNPCStrenght), 
-                    Convert.ToInt32(random.Next(100, 110) * difficulty.AdictionalNPCDefense));
-                EnemyTeam.Add(enemy);
+                int RandEnemy = random.Next(4);
+                switch (RandEnemy)
+                {
+                    case 0:
+                        BlankCharacter goblin = new Goblin(
+                            Convert.ToInt32(random.Next(400, 500) * difficulty.AdictionalNPCHealth),
+                            Convert.ToInt32(random.Next(60, 70) * difficulty.AdictionalNPCStrenght),
+                            Convert.ToInt32(random.Next(100, 110) * difficulty.AdictionalNPCDefense));
+                        EnemyTeam.Add(goblin);
+                        break;
+                    case 1:
+                        BlankCharacter rat = new Rat(
+                            Convert.ToInt32(random.Next(150, 225) * difficulty.AdictionalNPCHealth),
+                            Convert.ToInt32(random.Next(25, 30) * difficulty.AdictionalNPCStrenght),
+                            Convert.ToInt32(random.Next(10, 20) * difficulty.AdictionalNPCDefense));
+                        EnemyTeam.Add(rat);
+                        break;
+                    case 2:
+                        BlankCharacter skeleton = new Skeleton(
+                            Convert.ToInt32(random.Next(325, 400) * difficulty.AdictionalNPCHealth),
+                            Convert.ToInt32(random.Next(40, 60) * difficulty.AdictionalNPCStrenght),
+                            Convert.ToInt32(random.Next(30, 50) * difficulty.AdictionalNPCDefense));
+                        EnemyTeam.Add(skeleton);
+                        break;
+                    case 3:
+                        BlankCharacter thief = new Thief(
+                            Convert.ToInt32(random.Next(425, 500) * difficulty.AdictionalNPCHealth),
+                            Convert.ToInt32(random.Next(80, 95) * difficulty.AdictionalNPCStrenght),
+                            Convert.ToInt32(random.Next(20, 30) * difficulty.AdictionalNPCDefense));
+                        EnemyTeam.Add(thief);
+                        break;
+                }
             }
+
+            drawer.PrintFightFrame(28, 12, ConsoleColor.DarkRed, ConsoleColor.DarkRed);
 
             Console.Clear();
 
             //Механика сражения
-            drawer.PositionText("На вас напали!", 30, 5);
             while (EnemyTeam.Count != 0)
             {
+                if (PlayerTeam.Count == 0)
+                {
+                    PlayerDied();
+                }
+
                 RebuildTeam(ChooseEnemy, EnemyTeam);
                 RebuildTeam(ChooseAlly, PlayerTeam);
 
@@ -399,6 +430,145 @@ namespace Dungeon_Heroes
                 //Создаем список для выбора персонажа при помощи опций
                 drawer.PositionAnyColorText("Выберите вашего бойца: ", 5 , 3, ConsoleColor.Green);
                 interactionChooseAlly.SelectOption(10, 5);
+                
+                drawer.PositionAnyColorText("Начать сражение с противником:", 65, 3, ConsoleColor.Red);
+                interactionChooseEnemy.SelectOption(60, 5);
+                
+                //Цикл боя до момента смерти союзника/противника
+                while (true)
+                {
+                    Console.Clear();
+                    drawer.PrintASCIIAtPosition(PlayerTeam[interactionChooseAlly.OptionCounter].charAscii, 5, 14, ConsoleColor.Green, 0);
+                    drawer.PrintASCIIAtPosition(EnemyTeam[interactionChooseEnemy.OptionCounter].charAscii, 70, 14, ConsoleColor.DarkRed, 0);
+
+                    logger.PrintBattleLog(37, 10);
+
+                    UserOptionsInteraction interactionChooseAction = new UserOptionsInteraction(ChooseAction);
+
+                    drawer.PrintCharBrief(PlayerTeam, 6, 3, interactionChooseAlly.OptionCounter, 1);
+                    drawer.PrintCharBrief(EnemyTeam, 75, 3, interactionChooseEnemy.OptionCounter, 2);
+
+                    if (PlayerTeam[interactionChooseAlly.OptionCounter].IsDead())
+                    {
+                        PlayerTeam.Remove(PlayerTeam[interactionChooseAlly.OptionCounter]);
+                        break;
+                    }
+
+                    interactionChooseAction.SelectOption(45, 3);
+
+                    switch (interactionChooseAction.OptionCounter)
+                    {
+                        case 0:
+                            PlayerTeam[interactionChooseAlly.OptionCounter].HitEnemy(EnemyTeam[interactionChooseEnemy.OptionCounter]);
+                            logger.AddNewLog(PlayerTeam[interactionChooseAlly.OptionCounter].HitEnemyLog(EnemyTeam[interactionChooseEnemy.OptionCounter]));
+                            break;
+                        case 1:
+                            PlayerTeam[interactionChooseAlly.OptionCounter].AbilityHitEnemy(EnemyTeam[interactionChooseEnemy.OptionCounter]);
+                            logger.AddNewLog(PlayerTeam[interactionChooseAlly.OptionCounter].AbilityHitEnemyLog(EnemyTeam[interactionChooseEnemy.OptionCounter]));
+                            break;
+                        case 2:
+                            if (random.Next(0, 100) > 80)
+                            {
+                                drawer.PrintPressAnyKeyLikeText("Вам удалось сбежать!");
+                                Console.Clear();
+                                UpdateAllFrame();
+                                return;
+                            }
+                            else
+                            {
+                                drawer.PrintPressAnyKeyLikeText("Побег провалился!");
+                            }
+                            break;
+                    }
+
+                    Thread.Sleep(25);
+
+                    if (EnemyTeam[interactionChooseEnemy.OptionCounter].IsDead())
+                    {
+                        drawer.PositionAnyColorText($"{PlayerTeam[interactionChooseAlly.OptionCounter].CharInfo()} победил!", 33, 25, ConsoleColor.Green);
+                        drawer.PrintPressAnyKeyLikeText($"{EnemyTeam[interactionChooseEnemy.OptionCounter].CharInfo()} повержен!");
+                        EnemyTeam.Remove(EnemyTeam[interactionChooseEnemy.OptionCounter]);
+                        break;
+                    }
+
+                    EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemy(PlayerTeam[interactionChooseAlly.OptionCounter]);
+                    logger.AddNewLog(EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemyLog(PlayerTeam[interactionChooseAlly.OptionCounter]));
+                }
+                logger.ClearLogger();
+            }
+            newExp = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 50) / 2 + 200;
+            newGold = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 25);
+            generalGold += newGold * PlayerTeam.Count;
+            for (int i = 0; i < PlayerTeam.Count; i++)
+            {
+                PlayerTeam[i].GetExp(newExp);
+                PlayerTeam[i].GetNewLevel();
+            }
+            PostBattleMenu();
+        }
+        private void FightWithBossEvent()
+        {
+            Logger logger = new Logger();
+
+            List<string> ChooseEnemy = new List<string> { };
+            List<string> ChooseAction = new List<string> { "Атака", "Способность", "Побег!" };
+
+            //Заполнение команды противников 
+            List<BlankCharacter> EnemyTeam = new List<BlankCharacter> { };
+
+            while (EnemyTeam.Count < 1)
+            {
+                int RandBoss = random.Next(3);
+                switch (RandBoss)
+                {
+                    case 0:
+                        BlankCharacter demon = new BossDemon(
+                            Convert.ToInt32(random.Next(1500, 1650) * difficulty.AdictionalNPCHealth),
+                            Convert.ToInt32(random.Next(70, 90) * difficulty.AdictionalNPCStrenght),
+                            Convert.ToInt32(random.Next(50, 100) * difficulty.AdictionalNPCDefense));
+                        EnemyTeam.Add(demon);
+                        break;
+                    case 1:
+                        BlankCharacter dragon = new BossDragon(
+                            Convert.ToInt32(random.Next(1150, 1300) * difficulty.AdictionalNPCHealth),
+                            Convert.ToInt32(random.Next(150, 175) * difficulty.AdictionalNPCStrenght),
+                            Convert.ToInt32(random.Next(100, 110) * difficulty.AdictionalNPCDefense));
+                        EnemyTeam.Add(dragon);
+                        break;
+                    case 2:
+                        BlankCharacter giant = new BossUnicorn(
+                            Convert.ToInt32(random.Next(1800, 2000) * difficulty.AdictionalNPCHealth),
+                            Convert.ToInt32(random.Next(50, 65) * difficulty.AdictionalNPCStrenght),
+                            Convert.ToInt32(random.Next(100, 110) * difficulty.AdictionalNPCDefense));
+                        EnemyTeam.Add(giant);
+                        break;
+                }
+            }
+
+            drawer.PrintBossFrame(28, 12, ConsoleColor.DarkRed, ConsoleColor.DarkRed);
+
+            Console.Clear();
+
+            //Механика сражения
+            while (EnemyTeam.Count != 0)
+            {
+                if (PlayerTeam.Count == 0)
+                {
+                    PlayerDied();
+                }
+
+                RebuildTeam(ChooseEnemy, EnemyTeam);
+                RebuildTeam(ChooseAlly, PlayerTeam);
+
+                Console.Clear();
+
+                //Экземпляры класса интерактивного выбора опций 
+                UserOptionsInteraction interactionChooseAlly = new UserOptionsInteraction(ChooseAlly);
+                UserOptionsInteraction interactionChooseEnemy = new UserOptionsInteraction(ChooseEnemy);
+
+                //Создаем список для выбора персонажа при помощи опций
+                drawer.PositionAnyColorText("Выберите вашего бойца: ", 5, 3, ConsoleColor.Green);
+                interactionChooseAlly.SelectOption(10, 5);
 
                 drawer.PositionAnyColorText("Начать сражение с противником:", 65, 3, ConsoleColor.Red);
                 interactionChooseEnemy.SelectOption(60, 5);
@@ -407,6 +577,8 @@ namespace Dungeon_Heroes
                 while (true)
                 {
                     Console.Clear();
+                    drawer.PrintASCIIAtPosition(PlayerTeam[interactionChooseAlly.OptionCounter].charAscii, 5, 14, ConsoleColor.Green, 0);
+                    drawer.PrintASCIIAtPosition(EnemyTeam[interactionChooseEnemy.OptionCounter].charAscii, 70, 14, ConsoleColor.DarkRed, 0);
 
                     logger.PrintBattleLog(30, 10);
 
@@ -460,30 +632,26 @@ namespace Dungeon_Heroes
 
                     EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemy(PlayerTeam[interactionChooseAlly.OptionCounter]);
                     logger.AddNewLog(EnemyTeam[interactionChooseEnemy.OptionCounter].HitEnemyLog(PlayerTeam[interactionChooseAlly.OptionCounter]));
-
-                    if (PlayerTeam.Count == 0)
-                        endGameCode = 1;
                 }
                 logger.ClearLogger();
             }
 
-            if (endGameCode == 1)
+            newExp = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 50) / 2 + 200;
+            newGold = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 25);
+            generalGold += newGold * PlayerTeam.Count;
+            for (int i = 0; i < PlayerTeam.Count; i++)
             {
-                menu.ShowMainMenuScreen();
-            }
-            else
-            {
-                newExp = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 50) / 2 + 200;
-                newGold = Convert.ToInt32(difficulty.AdictionalKillExp * difficulty.MaxEnemyAtRoom * 25);
-                generalGold += newGold * PlayerTeam.Count;
-                for (int i = 0; i < PlayerTeam.Count; i++)
-                {
-                    PlayerTeam[i].GetExp(newExp);
-                    PlayerTeam[i].GetNewLevel();
-                }
+                PlayerTeam[i].GetExp(newExp);
+                PlayerTeam[i].GetNewLevel();
             }
 
             PostBattleMenu();
+        }
+        private void PlayerDied()
+        {
+            Console.Clear();
+            drawer.PrintDeadFrame(14, 12, ConsoleColor.DarkRed, ConsoleColor.DarkRed, ConsoleColor.Red);
+            menu.ShowMainMenuScreen();
         }
 
         //Событие появления сокровища
@@ -492,6 +660,7 @@ namespace Dungeon_Heroes
             //Вывести окно с информацией об ивенте - Вы нашли сокровище! Добавлено золота:
             newGold = random.Next(50, 250);
             generalGold += newGold;
+            drawer.PrintGoldFrame(28, 12, ConsoleColor.DarkYellow, ConsoleColor.DarkYellow);
             UpdateAllFrame();
         }
 
@@ -501,8 +670,9 @@ namespace Dungeon_Heroes
             //Вывести окно с информацией об ивенте - Вы попали в ловушку! Здоровье персонажей уменьшено на 25%
             for (int i = 0; i < PlayerTeam.Count; i++)
             {
-                PlayerTeam[i].TakeDamage(Convert.ToInt32(PlayerTeam[i].TotalHealth * 0.25));
+                PlayerTeam[i].TakeDamage(Convert.ToInt32(PlayerTeam[i].TotalHealth * 0.15));
             }
+            drawer.PrintTrapFrame(28, 12, ConsoleColor.DarkMagenta, ConsoleColor.Magenta);
             UpdateAllFrame();
         }
 
@@ -510,6 +680,8 @@ namespace Dungeon_Heroes
         private void FoundNothingEvent()
         {
             //Вывести окно с информацией об ивенте - Вы ничего здесь не нашли!
+            drawer.PrintNothingFrame(24, 12, ConsoleColor.White, ConsoleColor.White);
+            UpdateAllFrame();
         }
 
         //Вывод окна с информацией после сражения

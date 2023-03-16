@@ -11,6 +11,12 @@ namespace Dungeon_Heroes
     {
         public static string[,] ParseLevel(string levelPath)
         {
+            //Комментарий к ошибке парсера
+
+            //Заменить в классе GameProcess путь к папке с текстовыми файлами уровней
+            //Текстовые файлы уровней находятся в папке \Dungeon Heroes\Game\Dungeon\LevelDungeon\
+            //Полный путь до папки можно скопировать в свойствах текстовых уровней
+
             string[] lines = File.ReadAllLines(levelPath);
             string firstLine = lines[0];
             int rows = lines.Length;

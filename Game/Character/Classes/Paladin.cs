@@ -8,10 +8,27 @@ namespace Dungeon_Heroes
 {
     internal class Paladin : BlankCharacter
     {
+        public readonly string[] paladinAscii = new string[]
+        {
+            @"      _,.",
+            @"    ,` -.)",
+            @"   ( _/-\\-._",
+            @"  /,|`--._,-^|  ",
+            @"  \_| |`-._/||",
+            @"    |  `-, / |",
+            @"    |     || |",
+            @"     `r-._||/ ",
+            @" __,-<_     )`-/  `.",
+            @"'  \   `---'   \ ",
+            @"    |           |.",
+            @"    /           /",
+            @"\_/' \         |",
+        };
         public Paladin(int health, int strengh, int defense) : base(health, strengh, defense)
         {
             className = "Paladin";
             charName = GenerateName(random.Next(4, 8));
+            charAscii = paladinAscii;
         }
         public override void HitEnemy(BlankCharacter enemy)
         {

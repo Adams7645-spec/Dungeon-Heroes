@@ -12,16 +12,22 @@ namespace Dungeon_Heroes
         public int PlayerPosY { get; }
         public int ExitPosX { get; }
         public int ExitPosY { get; }
+        public int BossPosX { get; }
+        public int BossPosY { get; }
+        public bool BossIsActive { get; }
         public string LevelName { get; set; }
         protected int PointOfInterestCount { get; set; }
         public readonly List<BlankRoom> rooms = new List<BlankRoom> { };
-        public BlankDungeon(int playerXpos, int playerYpos, int exitPosX, int exitPosY)
+        public BlankDungeon(int playerXpos, int playerYpos, int exitPosX, int exitPosY, int bossPosX, int bossPosY)
         {
             LevelName = "Path";
             PlayerPosX = playerXpos;
             PlayerPosY = playerYpos;
             ExitPosX = exitPosX;
             ExitPosY = exitPosY;
+            BossPosX = bossPosX;
+            BossPosY = bossPosY;
+            BossIsActive = true;
             PointOfInterestCount = 0;
         }
         protected void SetRoomGrid(int startX, int lenghtX, int startY, int lenghtY)

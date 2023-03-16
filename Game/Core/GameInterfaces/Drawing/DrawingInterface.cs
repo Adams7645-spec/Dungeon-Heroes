@@ -45,6 +45,184 @@ namespace Dungeon_Heroes
             }
         }
 
+        public void PrintDeadFrame(int marginX, int marginY, ConsoleColor FrameColor, ConsoleColor ASCIIColor, ConsoleColor ASCIIBackgroundColor)
+        {
+            string[] ActionFrame = new string[]
+            {
+                "┌────────────────────────────────────────────────────────────────────────┐",
+                "│                                                                        │",
+                "│                                                                        │",
+                "│                                                                        │",
+                "│                                                                        │",
+                "│                                                                        │",
+                "│                                                                        │",
+                "└────────────────────────────────────────────────────────────────────────┘",
+            };
+            string[] ASCIIBackground = new string[]
+            {
+                @"░      ╗░░     ╗░   ╗░░░   ╗       ╗   ░     ╗░  ╗░░░  ╗       ╗      ╗░",
+                @"  ╔════╝░  ╔══  ╗    ╗░    ║  ╔════╝     ╔══  ╗  ║░░░  ║  ╔════╝  ╔══  ╗",
+                @"  ║░░  ╗░       ║  ╔    ╔  ║     ╗░░     ║░░  ║╚  ╗░  ╔╝     ╗░░      ╔╝",
+                @"  ║░░╚  ╗  ╔══  ║  ║╚  ╔╝  ║  ╔══╝░░     ║░░  ║░╚    ╔╝░  ╔══╝░░  ╔══  ╗",
+                @"╚      ╔╝  ║░░  ║  ║░╚═╝░  ║       ╗   ╚     ╔╝░░╚  ╔╝░░       ╗  ║░░  ║",
+                @"░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝   ░╚════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
+            };
+            string[] ASCIIForeground = new string[]
+            {
+                @"░██████╗░░█████╗░███╗░░░███╗███████╗   ░█████╗░██╗░░░██╗███████╗██████╗░",
+                @"██╔════╝░██╔══██╗████╗░████║██╔════╝   ██╔══██╗██║░░░██║██╔════╝██╔══██╗",
+                @"██║░░██╗░███████║██╔████╔██║█████╗░░   ██║░░██║╚██╗░██╔╝█████╗░░██████╔╝",
+                @"██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░   ██║░░██║░╚████╔╝░██╔══╝░░██╔══██╗",
+                @"╚██████╔╝██║░░██║██║░╚═╝░██║███████╗   ╚█████╔╝░░╚██╔╝░░███████╗██║░░██║",
+                @"░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝   ░╚════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
+            };
+            PrintASCIIAtPosition(ActionFrame, marginX, marginY, FrameColor);
+            PrintASCIIAtPosition(ASCIIBackground, marginX + 1, marginY + 1, ASCIIBackgroundColor);
+            PrintASCIIAtPosition(ASCIIForeground, marginX + 1, marginY + 1, ASCIIColor, 250);
+
+            Console.ReadKey();
+        }
+
+        public void PrintTrapFrame(int marginX, int marginY, ConsoleColor FrameColor, ConsoleColor ASCIIColor)
+        {
+            string[] ActionFrame = new string[]
+            {
+                "┌────────────────────────────────────┐",
+                "│                                    │",
+                "│                                    │",
+                "│                                    │",
+                "│                                    │",
+                "│                                    │",
+                "│                                    │",
+                "└────────────────────────────────────┘",
+            };
+            string[] ASCII = new string[]
+            {
+                @"████████╗██████╗░░█████╗░██████╗░██╗",
+                @"╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██║",
+                @"░░░██║░░░██████╔╝███████║██████╔╝██║",
+                @"░░░██║░░░██╔══██╗██╔══██║██╔═══╝░╚═╝",
+                @"░░░██║░░░██║░░██║██║░░██║██║░░░░░██╗",
+                @"░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝"
+            };
+            PrintASCIIAtPosition(ActionFrame, marginX, marginY, FrameColor);
+            PrintASCIIAtPosition(ASCII, marginX + 1, marginY + 1, ASCIIColor);
+
+            Console.ReadKey();
+        }
+
+        public void PrintNothingFrame(int marginX, int marginY, ConsoleColor FrameColor, ConsoleColor ASCIIColor)
+        {
+            string[] ActionFrame = new string[]
+            {
+                "┌───────────────────────────────────────────────────────┐",
+                "│                                                       │",
+                "│                                                       │",
+                "│                                                       │",
+                "│                                                       │",
+                "│                                                       │",
+                "│                                                       │",
+                "└───────────────────────────────────────────────────────┘",
+            };
+            string[] ASCII = new string[]
+            {
+                @"███╗░░██╗░█████╗░████████╗██╗░░██╗██╗███╗░░██╗░██████╗░",
+                @"████╗░██║██╔══██╗╚══██╔══╝██║░░██║██║████╗░██║██╔════╝░",
+                @"██╔██╗██║██║░░██║░░░██║░░░███████║██║██╔██╗██║██║░░██╗░",
+                @"██║╚████║██║░░██║░░░██║░░░██╔══██║██║██║╚████║██║░░╚██╗",
+                @"██║░╚███║╚█████╔╝░░░██║░░░██║░░██║██║██║░╚███║╚██████╔╝",
+                @"╚═╝░░╚══╝░╚════╝░░░░╚═╝░░░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝░╚═════╝░"
+            };
+            PrintASCIIAtPosition(ActionFrame, marginX, marginY, FrameColor);
+            PrintASCIIAtPosition(ASCII, marginX + 1, marginY + 1, ASCIIColor);
+
+            Console.ReadKey();
+        }
+
+        public void PrintGoldFrame(int marginX, int marginY, ConsoleColor FrameColor, ConsoleColor ASCIIColor)
+        {
+            string[] ActionFrame = new string[]
+            {
+                "┌───────────────────────────────────────────┐",
+                "│                                           │",
+                "│                                           │",
+                "│                                           │",
+                "│                                           │",
+                "│                                           │",
+                "│                                           │",
+                "└───────────────────────────────────────────┘",
+            };
+            string[] ASCII = new string[]
+            {
+                @"░░░░░░░░██████╗░░█████╗░██╗░░░░░██████╗░██╗",
+                @"░░██╗░░██╔════╝░██╔══██╗██║░░░░░██╔══██╗██║",
+                @"██████╗██║░░██╗░██║░░██║██║░░░░░██║░░██║██║",
+                @"╚═██╔═╝██║░░╚██╗██║░░██║██║░░░░░██║░░██║╚═╝",
+                @"░░╚═╝░░╚██████╔╝╚█████╔╝███████╗██████╔╝██╗",
+                @"░░░░░░░░╚═════╝░░╚════╝░╚══════╝╚═════╝░╚═╝"
+            };
+            PrintASCIIAtPosition(ActionFrame, marginX, marginY, FrameColor);
+            PrintASCIIAtPosition(ASCII, marginX + 1, marginY + 1, ASCIIColor);
+
+            Console.ReadKey();
+        }
+
+        public void PrintBossFrame(int marginX, int marginY, ConsoleColor FrameColor, ConsoleColor ASCIIColor)
+        {
+            string[] ActionFrame = new string[]
+            {
+                "┌───────────────────────────────────┐",
+                "│                                   │",
+                "│                                   │",
+                "│                                   │",
+                "│                                   │",
+                "│                                   │",
+                "│                                   │",
+                "└───────────────────────────────────┘",
+            };
+            string[] ASCII = new string[]
+            {
+                @"██████╗░░█████╗░░██████╗░██████╗██╗",
+                @"██╔══██╗██╔══██╗██╔════╝██╔════╝██║",
+                @"██████╦╝██║░░██║╚█████╗░╚█████╗░██║",
+                @"██╔══██╗██║░░██║░╚═══██╗░╚═══██╗╚═╝",
+                @"██████╦╝╚█████╔╝██████╔╝██████╔╝██╗",
+                @"╚═════╝░░╚════╝░╚═════╝░╚═════╝░╚═╝"
+            };
+            PrintASCIIAtPosition(ActionFrame, marginX, marginY, FrameColor);
+            PrintASCIIAtPosition(ASCII, marginX + 1, marginY + 1, ASCIIColor);
+
+            Console.ReadKey();
+        }
+
+        public void PrintFightFrame(int marginX, int marginY, ConsoleColor FrameColor, ConsoleColor ASCIIColor)
+        {
+            string[] ActionFrame = new string[]
+            {
+                "┌────────────────────────────────────────┐",
+                "│                                        │",
+                "│                                        │",
+                "│                                        │",
+                "│                                        │",
+                "│                                        │",
+                "│                                        │",
+                "└────────────────────────────────────────┘",
+            };
+            string[] ASCII = new string[]
+            {
+                @"███████╗██╗░██████╗░██╗░░██╗████████╗██╗",
+                @"██╔════╝██║██╔════╝░██║░░██║╚══██╔══╝██║",
+                @"█████╗░░██║██║░░██╗░███████║░░░██║░░░██║",
+                @"██╔══╝░░██║██║░░╚██╗██╔══██║░░░██║░░░╚═╝",
+                @"██║░░░░░██║╚██████╔╝██║░░██║░░░██║░░░██╗",
+                @"╚═╝░░░░░╚═╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝"
+            };
+            PrintASCIIAtPosition(ActionFrame, marginX, marginY, FrameColor);
+            PrintASCIIAtPosition(ASCII, marginX + 1, marginY + 1, ASCIIColor);
+
+            Console.ReadKey();
+        }
+
         //Вывод рисунка ASCII на определенные координаты в консоли
         public void PrintASCIIAtPosition(string[] asciiPicture, int marginLeft, int marginTop)
         {
@@ -53,6 +231,29 @@ namespace Dungeon_Heroes
                 Console.SetCursorPosition(marginLeft, marginTop + i);
                 Console.WriteLine($@"{asciiPicture[i]}");
                 Thread.Sleep(10);
+            }
+        }
+        public void PrintASCIIAtPosition(string[] asciiPicture, int marginLeft, int marginTop, ConsoleColor color)
+        {
+            for (int i = 0; i < asciiPicture.Length; i++)
+            {
+                Console.ForegroundColor = color;
+                Console.SetCursorPosition(marginLeft, marginTop + i);
+                Console.WriteLine($@"{asciiPicture[i]}");
+                Console.ResetColor();
+                Thread.Sleep(10);
+            }
+        }
+
+        public void PrintASCIIAtPosition(string[] asciiPicture, int marginLeft, int marginTop, ConsoleColor color, int delay)
+        {
+            for (int i = 0; i < asciiPicture.Length; i++)
+            {
+                Console.ForegroundColor = color;
+                Console.SetCursorPosition(marginLeft, marginTop + i);
+                Console.WriteLine($@"{asciiPicture[i]}");
+                Console.ResetColor();
+                Thread.Sleep(delay);
             }
         }
 
@@ -119,14 +320,13 @@ namespace Dungeon_Heroes
         {
             DifficultyLevel difficulty = new DifficultyLevel();
 
-            PositionText($"Информация об игровом мире: ", marginLeft, marginTop);
+            PositionAnyColorText($"Информация об игровом мире: ", marginLeft, marginTop, ConsoleColor.DarkGreen);
             PositionText($"Выбранный уровень сложности: {difficulty.DifficultyName}", marginLeft, marginTop + 1);
-            PositionText($"Уровень врагов: ", marginLeft, marginTop + 2);
             PositionText($"Множитель золота за сложность: {difficulty.AdictionalKillGold}", marginLeft, marginTop + 3);
             PositionText($"Множитель опыта за сложность: {difficulty.AdictionalKillExp}", marginLeft, marginTop + 4);
 
             //перенести в другое окно
-            PositionText($"Совет", marginLeft, marginTop + 5);
+            PositionText($"Совет: не ищите в игре смысл", marginLeft, marginTop + 5);
         }
         public void PrintCharBrief(List<BlankCharacter> TeamList, int marginLeft, int marginTop, int selectedCharId, int OneGreenTwoRedColor)
         {

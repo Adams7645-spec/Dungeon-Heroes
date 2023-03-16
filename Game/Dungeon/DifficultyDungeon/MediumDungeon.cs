@@ -16,7 +16,7 @@ namespace Dungeon_Heroes
         protected List<int> room6 = new List<int> { 5, 5, 22, 6 };
         protected List<int> room7 = new List<int> { 11, 13, 25, 2 };
         protected List<int> room8 = new List<int> { 39, 8, 23, 2 };
-        public MediumDungeon() : base(54, 4, 31, 31)
+        public MediumDungeon() : base(54, 4, 31, 31, 28, 15)
         {
             LevelName = "Medium1Level.txt";
             SetRoom(room1);
