@@ -40,6 +40,7 @@ namespace Dungeon_Heroes
         protected string charName;
         protected string className;
 
+        public string[] charAscii { get; set; }
         public int TotalHealth { get => totalHealth; }
         public int TotalStrengh { get => totalStrengh; }
         public int TotalDefense { get => totalDefense; }

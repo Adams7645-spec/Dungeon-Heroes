@@ -8,10 +8,26 @@ namespace Dungeon_Heroes
 {
     internal class Gunslinger : BlankCharacter
     {
+        public readonly string[] gunslingerAscii = new string[]
+        {
+            @"     _=____________________-_",
+            @"  =< ' | ========|____________",
+            @"    \| | ========|__________",
+            @"    /  | ========|/",
+            @"   |   | ========|'",
+            @"   |___| ________'",
+            @"  '.... /  |  |",
+            @" |......|  \  |",
+            @" |......|-____'",
+            @"'.......|",
+            @"|.......|",
+            @"|_______)"
+        };
         public Gunslinger(int health, int strengh, int defense) : base(health, strengh, defense)
         {
             className = "Gunslinger";
             charName = GenerateName(random.Next(4, 8));
+            charAscii = gunslingerAscii;
         }
         public override void HitEnemy(BlankCharacter enemy)
         {

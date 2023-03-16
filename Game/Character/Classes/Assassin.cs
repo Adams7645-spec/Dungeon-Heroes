@@ -8,10 +8,28 @@ namespace Dungeon_Heroes
 {
     internal class Assassin : BlankCharacter
     {
+        public readonly string[] assassinAscii = new string[]
+        {
+            @"        __ ",
+            @"       (**)",
+            @"       IIII ",
+            @"       #### ",
+            @"       ####",
+            @"    ___IIII___ ",
+            @" .-`_._'**' _._`-. ",
+            @"|/``  .`\/`.  ``\| ",
+            @"`     } () {     '",
+            @"      ) :: (",
+            @"      ( :: )",
+            @"      ( () )",
+            @"       \  / ",
+            @"        \/ "
+        };
         public Assassin(int health, int strengh, int defense) : base(health, strengh, defense)
         {
             className = "Assassin";
             charName = GenerateName(random.Next(4, 8));
+            charAscii = assassinAscii;
         }
         public override void HitEnemy(BlankCharacter enemy)
         {

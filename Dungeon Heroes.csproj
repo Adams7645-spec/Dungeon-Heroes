@@ -72,6 +72,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\Character\NPC\BossDemon.cs" />
+    <Compile Include="Game\Character\NPC\BossDragon.cs" />
+    <Compile Include="Game\Character\NPC\BossUnicorn.cs" />
+    <Compile Include="Game\Character\NPC\Rat.cs" />
+    <Compile Include="Game\Character\NPC\Skeleton.cs" />
+    <Compile Include="Game\Character\NPC\Thief.cs" />
     <Compile Include="Game\Dungeon\BlankRoom.cs" />
     <Compile Include="Game\Core\GameProcesses\DifficultyLevel.cs" />
     <Compile Include="Game\Core\GameProcesses\GameProcess.cs" />

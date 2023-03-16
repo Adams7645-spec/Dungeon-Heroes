@@ -8,10 +8,27 @@ namespace Dungeon_Heroes
 {
     internal class ShieldBearer : BlankCharacter
     {
+        public readonly string[] shielderAscii = new string[]
+        {
+            @"\_              _/",
+            @"] --__________-- [",
+            @"|       ||       |",
+            @"\       ||       /",
+            @" [      ||      ]",
+            @" |______||______|",
+            @" |------..------|",
+            @" ]      ||      [",
+            @"  \     ||     /",
+            @"   [    ||    ]",
+            @"   \    ||    /",
+            @"    [   ||   ]",
+            @"     \__||__/",
+        };
         public ShieldBearer(int health, int strengh, int defense) : base(health, strengh, defense)
         {
             className = "Shielder";
             charName = GenerateName(random.Next(4, 8));
+            charAscii = shielderAscii;
         }
         public override void AbilityHitEnemy(BlankCharacter enemy)
         {

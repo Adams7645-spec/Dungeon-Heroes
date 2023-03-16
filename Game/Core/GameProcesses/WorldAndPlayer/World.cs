@@ -11,6 +11,7 @@ namespace Dungeon_Heroes
         private BlankDungeon currentDungeon;
         public List<PointOfInterest> pointList = new List<PointOfInterest>();
         Random random = new Random();
+        DrawingInterface drawer = new DrawingInterface();
         public World(string[,] grid, BlankDungeon dungeon)
         {
             Grid = grid;
@@ -32,6 +33,11 @@ namespace Dungeon_Heroes
                     Console.ResetColor();
                 }
             }
+            if (currentDungeon.BossIsActive)
+            {
+                drawer.PositionAnyColorText("!", currentDungeon.BossPosX, currentDungeon.BossPosY - 1, ConsoleColor.DarkRed);
+            }
+            drawer.PositionAnyColorText("X", currentDungeon.ExitPosX, currentDungeon.ExitPosY - 1, ConsoleColor.Blue);
         }
         public void GeneratePointOfInterest()
         {
